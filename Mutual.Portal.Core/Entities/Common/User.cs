@@ -13,9 +13,11 @@ namespace Mutual.Portal.Core.Entities.Common
         [Required]
         public string Name { get; set; }
 
-        public string FacebookId { get; set; }
+        [Required]
+        public string SocialId { get; set; }
 
-        public string GoogleId { get; set; }
+        [Required]
+        public int SocialAccountProvider { get; set; }
 
         [Required]
         public DateTime RegisteredOn { get; set; }

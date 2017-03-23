@@ -6,7 +6,6 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -16,6 +15,11 @@ using Microsoft.Owin.Security.OAuth;
 using Mutual.Portal.Web.Models;
 using Mutual.Portal.Web.Providers;
 using Mutual.Portal.Web.Results;
+using Mutual.Portal.Service.BusinessLogic.UserManagement;
+using Mutual.Portal.Utility.Models;
+using Mutual.Portal.Service.BusinessLogic.UserManagement.Dto;
+using Mutual.Portal.Utility.Enums;
+using Mutual.Portal.Utility.Operations;
 
 namespace Mutual.Portal.Web.Controllers
 {
@@ -25,15 +29,17 @@ namespace Mutual.Portal.Web.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
+        private readonly IUserManager _userService;
 
         public AccountController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
+        public AccountController(ApplicationUserManager userManager, ISecureDataFormat<AuthenticationTicket> accessTokenFormat, IUserManager userService)
         {
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
+            _userService = userService;
         }
 
         public ApplicationUserManager UserManager
@@ -249,28 +255,28 @@ namespace Mutual.Portal.Web.Controllers
                 return new ChallengeResult(provider, this);
             }
 
-            ApplicationUser user = await UserManager.FindAsync(new UserLoginInfo(externalLogin.LoginProvider,
-                externalLogin.ProviderKey));
+            var loginProvider = EnumConverter.ToEnum<UserSocialAccountProviderType>(externalLogin.LoginProvider);
+            ResponseObject obj = _userService.CheckUseravailability(loginProvider, externalLogin.ProviderKey);
 
-            bool hasRegistered = user != null;
 
-            if (hasRegistered)
+            if (obj.MetaData.IsSucceeded)
             {
-                Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-                
-                 ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
-                    OAuthDefaults.AuthenticationType);
-                ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
-                    CookieAuthenticationDefaults.AuthenticationType);
+                var user = obj.Data as UserDto;
 
-                AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
-                Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
+                IEnumerable<Claim> claims = externalLogin.GetClaims();
+                ClaimsIdentity identity = new ClaimsIdentity(claims, OAuthDefaults.AuthenticationType);
+
+                identity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
+                identity.AddClaim(new Claim("socialAccountProvider", externalLogin.LoginProvider));
+                identity.AddClaim(new Claim("socialId", user.SocialId));
+                identity.AddClaim(new Claim("guid", user.GuidString));
+                identity.AddClaim(new Claim(ClaimTypes.Name, user.Name));
+
+                Authentication.SignIn(identity);
             }
             else
             {
-                IEnumerable<Claim> claims = externalLogin.GetClaims();
-                ClaimsIdentity identity = new ClaimsIdentity(claims, OAuthDefaults.AuthenticationType);
-                Authentication.SignIn(identity);
+                return Unauthorized();
             }
 
             return Ok();
@@ -424,6 +430,8 @@ namespace Mutual.Portal.Web.Controllers
             public string LoginProvider { get; set; }
             public string ProviderKey { get; set; }
             public string UserName { get; set; }
+            public string Email { get; set; }
+            public string UserCode { get; set; }
 
             public IList<Claim> GetClaims()
             {
@@ -462,7 +470,9 @@ namespace Mutual.Portal.Web.Controllers
                 {
                     LoginProvider = providerKeyClaim.Issuer,
                     ProviderKey = providerKeyClaim.Value,
-                    UserName = identity.FindFirstValue(ClaimTypes.Name)
+                    UserName = identity.FindFirstValue(ClaimTypes.Name),
+                    Email = identity.FindFirstValue(ClaimTypes.Email),
+                    UserCode = identity.FindFirstValue(ClaimTypes.NameIdentifier)
                 };
             }
         }

@@ -20,5 +20,14 @@
         <h2>Web Hosting</h2>
         <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
         <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301872">Learn more &raquo;</a></p>
+        <button onclick="facebookLogin()">Facebook Login</button>
     </div>
 </div>
+
+<script type="text/javascript">
+    var facebookLogin = function () {
+
+        var externalProviderUrl = "/api/Account/ExternalLogin?provider=Facebook&response_type=token&client_id=self&redirect_uri=http%3A%2F%2Flocalhost%3A52216%2F&state=D1dmGTGvO9Gm5Fntxllef_KyVjmeVSDcoEE3h77ngBE1";
+        window.location = externalProviderUrl;
+    }
+</script>

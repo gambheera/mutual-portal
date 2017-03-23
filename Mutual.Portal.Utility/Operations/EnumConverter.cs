@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace Mutual.Portal.Utility.Operations
 {
-    public class EnumConverter
+    public static class EnumConverter
     {
-
         public static List<KeyValuePair<string, int>> GetEnumList<T>()
         {
             var list = new List<KeyValuePair<string, int>>();
@@ -14,6 +13,11 @@ namespace Mutual.Portal.Utility.Operations
                 list.Add(new KeyValuePair<string, int>(e.ToString(), (int)e));
             }
             return list;
+        }
+
+        public static T ToEnum<T>(this string value)
+        {
+            return (T)Enum.Parse(typeof(T), value, true);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Mutual.Portal.Utility.Enums
         Teaching = 3,
     }
 
-    public enum UserAuthenticationType
+    public enum UserSocialAccountProviderType
     {
         Google = 1,
         Facebook = 2

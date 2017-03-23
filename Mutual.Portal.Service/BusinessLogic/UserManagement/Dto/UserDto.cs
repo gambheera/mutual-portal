@@ -9,8 +9,8 @@ namespace Mutual.Portal.Service.BusinessLogic.UserManagement.Dto
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public string FacebookId { get; set; }
-        public string GoogleId { get; set; }
+        public string SocialId { get; set; }
+        public int SocialAccountProvider { get; set; }
         public DateTime RegisteredOn { get; set; }
         public string RegisteredOnString => RegisteredOn.ToString("d");
         public DateTime LastLoginOn { get; set; }
@@ -22,7 +22,8 @@ namespace Mutual.Portal.Service.BusinessLogic.UserManagement.Dto
         public int State { get; set; } // Referring UserStates enum
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
-        public string Guid { get; set; }
+        public Guid Guid { get; set; }
+        public string GuidString => Guid.ToString();
         public int MyCurrentViewCount { get; set; }
         public int MyTotalViewCount { get; set; }
 
@@ -37,15 +38,15 @@ namespace Mutual.Portal.Service.BusinessLogic.UserManagement.Dto
                 ContactNumber2 = user.ContactNumber2,
                 Email = user.Email,
                 EmploymentType = user.EmploymentType,
-                FacebookId = user.FacebookId,
-                GoogleId = user.GoogleId,
+                SocialAccountProvider = user.SocialAccountProvider,
+                SocialId = user.SocialId,
                 IsActive = user.IsActive,
                 IsDeleted = user.IsDeleted,
                 LastLoginOn = user.LastLoginOn,
                 Name = user.Name,
                 RegisteredOn = user.RegisteredOn,
                 State = user.State,
-                Guid = user.Guid.ToString(),
+                Guid = user.Guid,
                 MyCurrentViewCount = user.MyCurrentViewCount,
                 MyTotalViewCount = user.MyTotalViewCount
             };
@@ -58,12 +59,13 @@ namespace Mutual.Portal.Service.BusinessLogic.UserManagement.Dto
             var obj = new User()
             {
                 Id = userDto.Id,
+                Guid=userDto.Guid,
                 ContactNumber1 = userDto.ContactNumber1,
                 ContactNumber2 = userDto.ContactNumber2,
                 Email = userDto.Email,
+                SocialAccountProvider=userDto.SocialAccountProvider,
+                SocialId=userDto.SocialId,
                 EmploymentType = userDto.EmploymentType,
-                FacebookId = userDto.FacebookId,
-                GoogleId = userDto.GoogleId,
                 IsActive = userDto.IsActive,
                 IsDeleted = userDto.IsDeleted,
                 LastLoginOn = userDto.LastLoginOn,

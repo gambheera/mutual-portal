@@ -1,4 +1,5 @@
-﻿using Mutual.Portal.Utility.Models;
+﻿using Mutual.Portal.Utility.Enums;
+using Mutual.Portal.Utility.Models;
 using System;
 using System.Collections.Generic;
 
@@ -6,14 +7,14 @@ namespace Mutual.Portal.Utility.Operations
 {
     public class ResponseManager
     {
-        public static ResponseObject GetExceptionResponse(string message, Exception exception, string errorCode)
+        public static ResponseObject GetExceptionResponse(string message, Exception exception, string errorCode, ResponseType errorResponse)
         {
             return new ResponseObject()
             {
                 MetaData = new MetaData()
                 {
                     IsSucceeded = false,
-                    HttpResponseCode=500,
+                    HttpResponse=errorResponse,
                     Message = message,
                     Exception = exception,
                     ErrorCode = errorCode
@@ -21,14 +22,14 @@ namespace Mutual.Portal.Utility.Operations
             };
         }
 
-        public static ResponseObject GetSuccessResponse(object successObj, string message, int httpResponseCode)
+        public static ResponseObject GetSuccessResponse(object successObj, string message, ResponseType httpResponseCode)
         {
             return new ResponseObject()
             {
                 MetaData = new MetaData()
                 {
                     IsSucceeded = true,
-                    HttpResponseCode = httpResponseCode,
+                    HttpResponse = httpResponseCode,
                     Message = message
                 },
 
@@ -36,14 +37,14 @@ namespace Mutual.Portal.Utility.Operations
             };
         }
 
-        public static ResponseObject GetLogicalErrorResponse(string message, string errorCode, int httpResponseCode)
+        public static ResponseObject GetLogicalErrorResponse(string message, string errorCode, ResponseType httpResponseCode)
         {
             return new ResponseObject()
             {
                 MetaData = new MetaData()
                 {
                     IsSucceeded = false,
-                    HttpResponseCode = httpResponseCode,
+                    HttpResponse = httpResponseCode,
                     Message = message,
                     ErrorCode = errorCode
                 }

@@ -55,9 +55,9 @@ namespace Mutual.Portal.Web
             //    consumerKey: "",
             //    consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //    appId: "",
-            //    appSecret: "");
+            app.UseFacebookAuthentication(
+                appId: "1383455475049155",
+                appSecret: "39a550ec1c3cf2839bf7d821d8a412de");
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {

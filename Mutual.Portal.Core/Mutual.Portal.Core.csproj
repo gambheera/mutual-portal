@@ -91,6 +91,10 @@
     <Compile Include="Migrations\201703121442569_3-12-8-11-p.Designer.cs">
       <DependentUpon>201703121442569_3-12-8-11-p.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703230333483_3-23-8-53-a.cs" />
+    <Compile Include="Migrations\201703230333483_3-23-8-53-a.Designer.cs">
+      <DependentUpon>201703230333483_3-23-8-53-a.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Persistence\IDbContext.cs" />
     <Compile Include="Persistence\IOperationDbContext.cs" />
@@ -118,6 +122,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703121442569_3-12-8-11-p.resx">
       <DependentUpon>201703121442569_3-12-8-11-p.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703230333483_3-23-8-53-a.resx">
+      <DependentUpon>201703230333483_3-23-8-53-a.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
