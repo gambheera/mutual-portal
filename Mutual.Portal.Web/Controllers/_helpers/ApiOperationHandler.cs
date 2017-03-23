@@ -1,4 +1,5 @@
 ﻿
+using Mutual.Portal.Utility.Enums;
 using Mutual.Portal.Utility.Models;
 using System.Linq;
 using System.Security.Claims;
@@ -26,7 +27,7 @@ namespace Mutual.Portal.Web.Controllers._helpers
 
         public IHttpActionResult GetHttpClientResponse(ResponseObject responseObject)
         {
-            if (responseObject.MetaData.HttpResponseCode == 500)
+            if (responseObject.MetaData.HttpResponse == ResponseType.InternalServerError)
             {
                 // Then this is an exception. return 500
                 var exp = responseObject.MetaData.Exception;
@@ -34,7 +35,7 @@ namespace Mutual.Portal.Web.Controllers._helpers
                 return InternalServerError(exp);
             }
 
-            if (responseObject.MetaData.HttpResponseCode == 201)
+            if (responseObject.MetaData.HttpResponse == ResponseType.Created)
             {
                 return Created("", responseObject);   
             }

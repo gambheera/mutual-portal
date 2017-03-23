@@ -18,7 +18,7 @@ namespace Mutual.Portal.Service._helpers
             }
             catch (Exception ex)
             {
-                ResponseManager.GetExceptionResponse("Exception in Attached Files Flushing", ex, "EXP-00000");
+                ResponseManager.GetExceptionResponse("Exception in Attached Files Flushing", ex, "EXP-00000", Utility.Enums.ResponseType.InternalServerError);
             }
 
         }

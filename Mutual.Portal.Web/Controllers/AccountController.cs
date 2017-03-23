@@ -29,17 +29,22 @@ namespace Mutual.Portal.Web.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
-        private readonly IUserManager _userService;
+        private IUserManager _userService;
 
         public AccountController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ISecureDataFormat<AuthenticationTicket> accessTokenFormat, IUserManager userService)
+        public AccountController(IUserManager userService)
+        {
+            _userService = userService;
+        }
+
+        public AccountController(ApplicationUserManager userManager, ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
         {
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
-            _userService = userService;
+           // _userService = userService;
         }
 
         public ApplicationUserManager UserManager
@@ -256,7 +261,7 @@ namespace Mutual.Portal.Web.Controllers
             }
 
             var loginProvider = EnumConverter.ToEnum<UserSocialAccountProviderType>(externalLogin.LoginProvider);
-            ResponseObject obj = _userService.CheckUseravailability(loginProvider, externalLogin.ProviderKey);
+            var obj = _userService.CheckUseravailability(loginProvider, externalLogin.ProviderKey);
 
 
             if (obj.MetaData.IsSucceeded)
@@ -466,7 +471,7 @@ namespace Mutual.Portal.Web.Controllers
                     return null;
                 }
 
-                return new ExternalLoginData
+                var obj = new ExternalLoginData
                 {
                     LoginProvider = providerKeyClaim.Issuer,
                     ProviderKey = providerKeyClaim.Value,
@@ -474,6 +479,8 @@ namespace Mutual.Portal.Web.Controllers
                     Email = identity.FindFirstValue(ClaimTypes.Email),
                     UserCode = identity.FindFirstValue(ClaimTypes.NameIdentifier)
                 };
+
+                return obj;
             }
         }
 
