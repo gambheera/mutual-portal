@@ -23,6 +23,18 @@ namespace Mutual.Portal.Web
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/app/lib").Include(
+                      "~/app/lib/angular.min.js",
+                      "~/app/lib/angular-cookies.min.js",
+                      "~/app/lib/angular-local-storage.min.js",
+                      "~/app/lib/angular-touch.min.js"
+                      ));
+
+            bundles.Add(new ScriptBundle("~/app/business").Include(
+                      "~/app/app.js",
+                      "~/app/controllers/HomeCtrl.js",
+                      "~/Views/Home/HomeCtrl.js"));
         }
     }
 }
