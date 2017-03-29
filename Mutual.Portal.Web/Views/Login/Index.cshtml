@@ -1,0 +1,11 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div ng-controller="LoginCtrl as vm">
+    <h2>Login</h2>
+
+    <button ng-click="vm.loginWithSocial('Facebook')">Login ith Facebook</button>
+    <button ng-click="vm.loginWithSocial('Google')">Login ith Google</button>
+</div>

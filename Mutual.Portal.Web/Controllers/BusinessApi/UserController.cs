@@ -1,4 +1,5 @@
 ﻿using Mutual.Portal.Service.BusinessLogic.UserManagement;
+using Mutual.Portal.Web.Controllers._helpers;
 using System.Web.Http;
 
 namespace Mutual.Portal.Web.Controllers.BusinessApi
@@ -7,19 +8,28 @@ namespace Mutual.Portal.Web.Controllers.BusinessApi
     public class UserController : ApiController
     {
         private IUserManager _userManager;
+        private readonly ApiOperationHandler _apiOperationHandler;
 
         public UserController(IUserManager usermanager)
         {
             _userManager = usermanager;
+            _apiOperationHandler = ApiOperationHandler.GetSingltonInstance();
         }
 
-        //ResponseObject GetUserStatusByGuid(string userGuid);
-
+        [Authorize]
         [Route("get-user-status-by-guid")]
         public IHttpActionResult GetUserStatusByGuid(string userGuid)
         {
             var obj = _userManager.GetUserStatusByGuid("");
-            return Ok(obj);
+            return _apiOperationHandler.GetHttpClientResponse(obj);
+        }
+
+        [Authorize]
+        [Route("get-user-info")]
+        public IHttpActionResult GetUserInfo()
+        {
+            var email = _apiOperationHandler.GetUserEmail();
+            return Ok(email);
         }
     }
 }

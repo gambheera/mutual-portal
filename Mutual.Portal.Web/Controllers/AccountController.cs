@@ -237,6 +237,7 @@ namespace Mutual.Portal.Web.Controllers
         [Route("ExternalLogin", Name = "ExternalLogin")]
         public async Task<IHttpActionResult> GetExternalLogin(string provider, string error = null)
         {
+
             if (error != null)
             {
                 return Redirect(Url.Content("~/") + "#error=" + Uri.EscapeDataString(error));

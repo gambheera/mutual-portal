@@ -1,11 +1,11 @@
 ﻿
 (function () {
     'use strict';
-    angular.module('mutualApp').controller('HomeCtrl', HomeCtrl);
+    angular.module('mutualApp').controller('UserDashBoardCtrl', UserDashBoardCtrl);
 
-    HomeCtrl.$inject = ['Userservice'];
+    UserDashBoardCtrl.$inject = ['Userservice'];
 
-    function HomeCtrl(Userservice) {
+    function UserDashBoardCtrl(Userservice) {
         var vm = this;
         vm.title = 'Homepage';
 

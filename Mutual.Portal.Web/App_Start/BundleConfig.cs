@@ -33,8 +33,10 @@ namespace Mutual.Portal.Web
 
             bundles.Add(new ScriptBundle("~/app/business").Include(
                       "~/app/app.js",
-                      "~/app/controllers/HomeCtrl.js",
-                      "~/Views/Home/HomeCtrl.js"));
+                      "~/app/controllers/*.js",
+                      "~/app/services/*.js",
+                      "~/app/utility/MvcNavigationService.js"
+                      ));
         }
     }
 }
