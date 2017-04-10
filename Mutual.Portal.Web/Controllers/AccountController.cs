@@ -12,14 +12,15 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
+
 using Mutual.Portal.Web.Models;
-using Mutual.Portal.Web.Providers;
 using Mutual.Portal.Web.Results;
 using Mutual.Portal.Service.BusinessLogic.UserManagement;
-using Mutual.Portal.Utility.Models;
 using Mutual.Portal.Service.BusinessLogic.UserManagement.Dto;
 using Mutual.Portal.Utility.Enums;
 using Mutual.Portal.Utility.Operations;
+using Mutual.Portal.Web.Controllers._helpers;
+using Mutual.Portal.Utility.Models;
 
 namespace Mutual.Portal.Web.Controllers
 {
@@ -237,7 +238,6 @@ namespace Mutual.Portal.Web.Controllers
         [Route("ExternalLogin", Name = "ExternalLogin")]
         public async Task<IHttpActionResult> GetExternalLogin(string provider, string error = null)
         {
-
             if (error != null)
             {
                 return Redirect(Url.Content("~/") + "#error=" + Uri.EscapeDataString(error));
@@ -273,6 +273,7 @@ namespace Mutual.Portal.Web.Controllers
                 ClaimsIdentity identity = new ClaimsIdentity(claims, OAuthDefaults.AuthenticationType);
 
                 identity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
+                identity.AddClaim(new Claim(ClaimTypes.SerialNumber, user.GuidString));
                 identity.AddClaim(new Claim("socialAccountProvider", externalLogin.LoginProvider));
                 identity.AddClaim(new Claim("socialId", user.SocialId));
                 identity.AddClaim(new Claim("guid", user.GuidString));
@@ -286,6 +287,62 @@ namespace Mutual.Portal.Web.Controllers
             }
 
             return Ok();
+        }
+
+        // GET api/Account/ExternalLogin
+        [OverrideAuthentication]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
+        [AllowAnonymous]
+        [Route("ExternalRegister", Name = "ExternalRegister")]
+        public async Task<IHttpActionResult> GetExternalRegister(string provider, int employerType, string error = null)
+        {
+
+            if (error != null)
+            {
+                return Redirect(Url.Content("~/") + "#error=" + Uri.EscapeDataString(error));
+            }
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                return new ChallengeResult(provider, this);
+            }
+
+            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
+
+            if (externalLogin == null)
+            {
+                return InternalServerError();
+            }
+
+            if (externalLogin.LoginProvider != provider)
+            {
+                Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+                return new ChallengeResult(provider, this);
+            }
+            
+            var loginProvider = EnumConverter.ToEnum<UserSocialAccountProviderType>(externalLogin.LoginProvider);
+
+            // registration call here
+            var userDto = new UserDto()
+            {
+                Email = externalLogin.Email,
+                EmploymentType = employerType,
+                Guid = new Guid(),
+                Id = 0,
+                IsActive = true,
+                IsDeleted = false,
+                MyCurrentViewCount = 0,
+                MyTotalViewCount = 0,
+                LastLoginOn = DateTime.Now,
+                RegisteredOn = DateTime.Now,
+                Name = externalLogin.UserName,
+                SocialAccountProvider = (int)EnumConverter.ToEnum<UserSocialAccountProviderType>(externalLogin.LoginProvider),
+                SocialId = externalLogin.ProviderKey,
+                State = (int)UserStates.Free,
+            };
+
+            var responseObj = _userService.RegisterUser(userDto);
+            return _getHttpClientResponse(responseObj);
         }
 
         // GET api/Account/ExternalLogins?returnUrl=%2F&generateState=true
@@ -323,6 +380,7 @@ namespace Mutual.Portal.Web.Controllers
                     }),
                     State = state
                 };
+
                 logins.Add(login);
             }
 
@@ -506,6 +564,34 @@ namespace Mutual.Portal.Web.Controllers
             }
         }
 
+        private IHttpActionResult _getHttpClientResponse(ResponseObject responseObject)
+        {
+            if (responseObject.MetaData.HttpResponse == ResponseType.InternalServerError)
+            {
+                // Then this is an exception. return 500
+                var exp = responseObject.MetaData.Exception;
+                var message = responseObject.MetaData.Message + "\nError Code: " + responseObject.MetaData.ErrorCode;
+
+                if (exp == null) exp = new Exception(message);
+
+                exp.Source = message;
+                var err = InternalServerError(exp);
+
+                return err;
+            }
+
+            if (responseObject.MetaData.HttpResponse == ResponseType.Created)
+            {
+                return Created("", responseObject);
+            }
+
+            return Ok(responseObject);
+        }
+
         #endregion
+
+        //==============================================
+
+        
     }
 }

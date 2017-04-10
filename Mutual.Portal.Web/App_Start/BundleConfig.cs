@@ -22,7 +22,10 @@ namespace Mutual.Portal.Web
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/callout.css",
+                      "~/Content/bootstrap-social.css",
+                      "~/Content/font-awesome.min.css"));
 
             bundles.Add(new ScriptBundle("~/app/lib").Include(
                       "~/app/lib/angular.min.js",
@@ -33,9 +36,9 @@ namespace Mutual.Portal.Web
 
             bundles.Add(new ScriptBundle("~/app/business").Include(
                       "~/app/app.js",
+                      "~/app/utility/*.js",
                       "~/app/controllers/*.js",
-                      "~/app/services/*.js",
-                      "~/app/utility/MvcNavigationService.js"
+                      "~/app/services/*.js"
                       ));
         }
     }

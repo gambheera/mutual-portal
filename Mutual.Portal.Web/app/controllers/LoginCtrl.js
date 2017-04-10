@@ -1,18 +1,11 @@
 ﻿(function () {
     'use strict';
-    angular.module('mutualApp').controller('LoginCtrl', LoginCtrl);
-
-    LoginCtrl.$inject = ['$scope', 'localStorageService', 'MvcNavigationService'];
-
-    function LoginCtrl($scope, localStorageService, MvcNavigationService) {
+    
+    function loginCtrl($scope, $rootScope, localStorageService, mvcNavigationService, userService) {
         var vm = this;
         vm.title = 'Homepage';
-
+        vm.token = "";
         $scope.$parent.title = "Controlled by chiled";
-
-        var _init = function () {
-            _checkLocationHash();
-        };
 
         vm.loginWithSocial = function (provider) {
             // dev
@@ -27,20 +20,50 @@
             
         };
 
-        var _checkLocationHash = function(){
+        vm.userInfo = function () {
+            userService.getUserInfo(vm.token).then(function (s) {
+                console.log(s);
+            }, function (f) {
+                console.log(f);
+            });
+        };
+
+        vm.getUserEmployeeType = function() {
+            userService.getUserEmployeeType().then(function(successResponse) {
+                console.log(successResponse);
+                alert('Success');
+            }, function(failedResponse) {
+                console.log(failedResponse);
+                alert('Failed');
+            });
+        };
+
+        var checkLocationHash = function () {
             if(location.hash){
                 if(location.hash.split('access_token=')){
                     var accessToken = location.hash.split('access_token=')[1].split('&')[0];
-                    if(accessToken){
+                    if (accessToken) {
                         localStorageService.set("user_access_token", accessToken);
-
-                        // Time to go to the dashboard page
-                        MvcNavigationService.navigate('/userdashboard');
+                        userService.getUserInfo().then(function (s) {
+                            localStorageService.set("user_info", s.data.data);
+                            window.location = '/userdashboard';
+                        }, function(f) {
+                            console.log(f);
+                        });
                     }
                 }
             }
         };
 
-        _init();
+        var init = function() {
+            checkLocationHash();
+        };
+
+        init();
     }
+
+    loginCtrl.$inject = ['$scope', '$rootScope', 'localStorageService', 'mvcNavigationService', 'userService'];
+
+    angular.module('mutualApp').controller('loginCtrl', loginCtrl);
+
 })();

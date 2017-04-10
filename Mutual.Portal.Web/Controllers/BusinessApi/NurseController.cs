@@ -1,5 +1,8 @@
 ﻿using Mutual.Portal.Service.BusinessLogic.NurseManagement;
 using Mutual.Portal.Service.BusinessLogic.NurseManagement.Dto;
+using Mutual.Portal.Utility.Enums;
+using Mutual.Portal.Utility.Models;
+using System;
 using System.Web.Http;
 
 namespace Mutual.Portal.Web.Controllers.BusinessApi
@@ -50,6 +53,34 @@ namespace Mutual.Portal.Web.Controllers.BusinessApi
             var obj = _nurseManager.GetNurseListByDreamHospital(hospitalId, "");
             return Ok(obj);
         }
+
+        #region Helpers
+
+        private IHttpActionResult _getHttpClientResponse(ResponseObject responseObject)
+        {
+            if (responseObject.MetaData.HttpResponse == ResponseType.InternalServerError)
+            {
+                // Then this is an exception. return 500
+                var exp = responseObject.MetaData.Exception;
+                var message = responseObject.MetaData.Message + "\nError Code: " + responseObject.MetaData.ErrorCode;
+
+                if (exp == null) exp = new Exception(message);
+
+                exp.Source = message;
+                var err = InternalServerError(exp);
+
+                return err;
+            }
+
+            if (responseObject.MetaData.HttpResponse == ResponseType.Created)
+            {
+                return Created("", responseObject);
+            }
+
+            return Ok(responseObject);
+        }
+
+        #endregion
 
     }
 }

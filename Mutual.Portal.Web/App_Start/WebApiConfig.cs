@@ -15,6 +15,11 @@ namespace Mutual.Portal.Web
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
+
+            config.Filters.Add(new HostAuthenticationAttribute("bearer")); //added this
+            config.Filters.Add(new AuthorizeAttribute());
+            // config.EnableCors(new EnableCorsAttribute("*", "*", "*", "*"));
+
             // Web API routes
             config.MapHttpAttributeRoutes();
 

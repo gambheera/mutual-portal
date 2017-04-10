@@ -19,5 +19,6 @@ namespace Mutual.Portal.Utility.Operations
         {
             return (T)Enum.Parse(typeof(T), value, true);
         }
+
     }
 }

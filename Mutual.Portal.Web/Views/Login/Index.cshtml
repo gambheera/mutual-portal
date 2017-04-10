@@ -3,9 +3,25 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div ng-controller="LoginCtrl as vm">
+<div ng-controller="loginCtrl as vm">
     <h2>Login</h2>
 
-    <button ng-click="vm.loginWithSocial('Facebook')">Login ith Facebook</button> 
-    <button ng-click="vm.loginWithSocial('Google')">Login ith Google</button>
+    <button ng-click="vm.userInfo()">User Info</button>
+
+    <button ng-click="vm.getUserEmployeeType()">User Info</button>
+
+    <div class="row">
+        <div class="col-md-3">
+
+        </div>
+        <div class="col-md-6">
+                <a class="btn btn-block btn-social btn-lg btn-facebook" ng-click="vm.loginWithSocial('Facebook')">
+                    <span class="fa fa-facebook"></span> Login in with Facebook
+                </a>
+                <a class="btn btn-block btn-social btn-lg btn-google" ng-click="vm.loginWithSocial('Google')">
+                    <span class="fa fa-google"></span> Login in with Google
+                </a>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
 </div>

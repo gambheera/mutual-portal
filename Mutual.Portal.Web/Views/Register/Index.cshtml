@@ -4,5 +4,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div ng-controller="registerCtrl as vm">
+    <h2>Register</h2>
+
+    <button ng-click="vm.registerWithSocial('Facebook', 1)">Login ith Facebook</button>
+    <button ng-click="vm.registerWithSocial('Google', 1)">Login ith Google</button>
+</div>
 
