@@ -3,6 +3,8 @@ using Mutual.Portal.Service.BusinessLogic.NurseManagement.Dto;
 using Mutual.Portal.Utility.Enums;
 using Mutual.Portal.Utility.Models;
 using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Web.Http;
 
 namespace Mutual.Portal.Web.Controllers.BusinessApi
@@ -10,20 +12,31 @@ namespace Mutual.Portal.Web.Controllers.BusinessApi
     [RoutePrefix("api/nurse")]
     public class NurseController : ApiController
     {
-        private INurseManager _nurseManager;
+        private readonly INurseManager _nurseManager;
 
         public NurseController(INurseManager nurseManager)
         {
             _nurseManager = nurseManager;
         }
 
+        [HttpGet]
+        [Authorize]
+        [Route("get-hospital-list")]
+        public IHttpActionResult GetHospitalList()
+        {
+            var obj = _nurseManager.GetHospitalList();
+            return _getHttpClientResponse(obj);
+        }
+
+
         [HttpPost]
         [Authorize]
         [Route("save-nurse")]
         public IHttpActionResult SaveNurse(NurseDto nurseDto)
         {
-            var obj = _nurseManager.SaveNurse(nurseDto);
-            return Ok(obj);
+            string guid = _getUserGuid();
+            var obj = _nurseManager.SaveNurse(nurseDto, guid);
+            return _getHttpClientResponse(obj);
         }
 
         [HttpGet]
@@ -31,8 +44,9 @@ namespace Mutual.Portal.Web.Controllers.BusinessApi
         [Route("get-individual-nurse")]
         public IHttpActionResult GetIndividualNurse(string requesteeGuid)
         {
-            var obj = _nurseManager.GetIndividualNurse(requesteeGuid, "");
-            return Ok(obj);
+            string requesterGuid = _getUserGuid();
+            var obj = _nurseManager.GetIndividualNurse(requesteeGuid, requesterGuid);
+            return _getHttpClientResponse(obj);
         }
 
         [HttpGet]
@@ -78,6 +92,13 @@ namespace Mutual.Portal.Web.Controllers.BusinessApi
             }
 
             return Ok(responseObject);
+        }
+
+        public string _getUserGuid()
+        {
+            var identity = (ClaimsIdentity)User.Identity;
+            var userEmail = identity.Claims.Where(c => c.Type == ClaimTypes.SerialNumber).Select(c => c.Value).SingleOrDefault();
+            return userEmail;
         }
 
         #endregion

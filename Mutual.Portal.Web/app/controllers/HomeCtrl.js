@@ -2,7 +2,7 @@
 (function () {
     'use strict';
 
-    function homeCtrl(userService) {
+    function homeCtrl(toastrService, swalService, userService) {
         var vm = this;
         vm.title = 'Homepage';
 
@@ -13,9 +13,15 @@
                 console.log(errorRespond);
             });
         };
+
+        vm.testToastr = function() {
+            swalService.confirm('Hello world!', 'The topic').then(function(res) {
+                alert(res);
+            });
+        };
     }
 
-    homeCtrl.$inject = ['userService'];
+    homeCtrl.$inject = ['toastrService', 'swalService', 'userService'];
 
     angular.module('mutualApp').controller('homeCtrl', homeCtrl);
 

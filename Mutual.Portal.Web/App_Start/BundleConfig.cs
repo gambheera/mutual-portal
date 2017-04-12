@@ -25,13 +25,24 @@ namespace Mutual.Portal.Web
                       "~/Content/site.css",
                       "~/Content/callout.css",
                       "~/Content/bootstrap-social.css",
-                      "~/Content/font-awesome.min.css"));
+                      "~/Content/font-awesome.min.css",
+                      "~/Content/custom.css"));
+
+            bundles.Add(new StyleBundle("~/app/plugins/css").Include(
+                      "~/app/lib/plugins/toastr/angular-toastr.css",
+                      "~/app/lib/plugins/sweet-alert/sweetalert2.min.css"));
+
+            bundles.Add(new ScriptBundle("~/app/plugins/js").Include(
+                "~/app/lib/plugins/toastr/angular-toastr.tpls.js",
+                "~/app/lib/plugins/sweet-alert/sweetalert2.min.js"
+                ));
 
             bundles.Add(new ScriptBundle("~/app/lib").Include(
                       "~/app/lib/angular.min.js",
                       "~/app/lib/angular-cookies.min.js",
                       "~/app/lib/angular-local-storage.min.js",
-                      "~/app/lib/angular-touch.min.js"
+                      "~/app/lib/angular-touch.min.js",
+                      "~/app/lib/validator.js"
                       ));
 
             bundles.Add(new ScriptBundle("~/app/business").Include(

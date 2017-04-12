@@ -233,6 +233,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\ViewControlers\LoginController.cs" />
+    <Compile Include="Controllers\ViewControlers\NursingEmployeeDetailController.cs" />
     <Compile Include="Controllers\ViewControlers\RegisterController.cs" />
     <Compile Include="Controllers\ViewControlers\UserDashboardController.cs" />
     <Compile Include="Controllers\_helpers\ApiOperationHandler.cs" />
@@ -241,6 +242,7 @@
     </Compile>
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\FacebookBackChannelHandler.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
@@ -251,23 +253,32 @@
     <Content Include="app\app.js" />
     <Content Include="app\controllers\homeCtrl.js" />
     <Content Include="app\controllers\loginCtrl.js" />
+    <Content Include="app\controllers\nursingEmployeeDetailCtrl.js" />
     <Content Include="app\controllers\registerCtrl.js" />
     <Content Include="app\controllers\userDashBoardCtrl.js" />
     <Content Include="app\lib\angular-cookies.min.js" />
     <Content Include="app\lib\angular-local-storage.min.js" />
     <Content Include="app\lib\angular-touch.min.js" />
     <Content Include="app\lib\angular.min.js" />
+    <Content Include="app\lib\plugins\sweet-alert\sweetalert2.min.css" />
+    <Content Include="app\lib\plugins\sweet-alert\sweetalert2.min.js" />
+    <Content Include="app\lib\plugins\toastr\angular-toastr.css" />
     <Content Include="app\lib\ui-bootstrap-tpls-0.12.1.min.js" />
+    <Content Include="app\lib\validator.js" />
+    <Content Include="app\services\nurseService.js" />
     <Content Include="app\services\userService.js" />
     <Content Include="app\dump\authInterceptorService.js" />
     <Content Include="app\utility\httpService.js" />
     <Content Include="app\utility\mvcNavigationService.js" />
+    <Content Include="app\utility\swalService.js" />
+    <Content Include="app\utility\toastrService.js" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\16708284_10158151001810654_3646449609479965192_n.jpg" />
     <Content Include="Content\bootstrap-social.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\callout.css" />
+    <Content Include="Content\custom.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
@@ -299,6 +310,7 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="app\lib\plugins\toastr\angular-toastr.tpls.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -329,6 +341,7 @@
     <Content Include="Views\Register\Index.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\UserDashboard\Index.cshtml" />
+    <Content Include="Views\NursingEmployeeDetail\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

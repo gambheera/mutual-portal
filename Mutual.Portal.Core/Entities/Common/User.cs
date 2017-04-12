@@ -31,6 +31,8 @@ namespace Mutual.Portal.Core.Entities.Common
 
         public string Email { get; set; }
 
+        public string Code { get; set; }
+
         [Required]
         public int EmploymentType { get; set; } // Referring EmploymentTypes enum
 
@@ -40,6 +42,12 @@ namespace Mutual.Portal.Core.Entities.Common
         public bool IsActive { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public bool IsRegistrationConfirmed { get; set; }
+
+        public bool IsEmployeeDetailesProvided { get; set; }
+
+        public bool IsWorkingPlaceDetailsProvided { get; set; }
 
         [Required]
         public Guid Guid { get; set; }

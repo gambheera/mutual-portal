@@ -5,7 +5,7 @@
     function _layoutCtrl($scope, $rootScope, userService) {
         var vm = this;
         $scope.title = 'Homepage';
-        $scope.username;
+        $scope.username = "";
 
         vm.logout = function() {
             var result = userService.logout();
@@ -14,6 +14,11 @@
                 window.location = '/';
             }
         };
+
+        vm.gotoLogin = function () {
+            debugger;
+            window.location = '/login';
+        }
     }
 
     _layoutCtrl.$inject = ['$scope', '$rootScope', 'userService'];

@@ -7,9 +7,9 @@ namespace Mutual.Portal.Service.BusinessLogic.UserManagement
 {
     public interface IUserManager
     {
-        ResponseObject CheckUseravailability(UserSocialAccountProviderType userAuthenticationType, string socialId);
+        ResponseObject CheckUseravailability(UserSocialAccountProviderType userAuthenticationType, string socialId, string name, string email);
         ResponseObject GetUserStatusByGuid(string userGuid);
-        ResponseObject RegisterUser(UserDto userDto);
+        ResponseObject ConfirmRegistration(UserDto userDto);
         ResponseObject GetUserEmployeeType(string userGuid);
         ResponseObject GetUserInfo(string userGuid);
     }

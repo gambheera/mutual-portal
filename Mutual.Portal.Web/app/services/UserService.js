@@ -38,11 +38,20 @@
                 });
         };
 
+        function register(obj) {
+            var url = 'api/user/confirm-registration';
+            return httpService.put(url, obj)
+                .then(function (response) {
+                    return response;
+                });
+        };
+
         var service = {
             logout: logout,
             authenticateCurrentPosition: authenticateCurrentPosition,
             getUserInfo: getUserInfo,
-            getUserEmployeeType: getUserEmployeeType
+            getUserEmployeeType: getUserEmployeeType,
+            register: register
         };
 
         return service;

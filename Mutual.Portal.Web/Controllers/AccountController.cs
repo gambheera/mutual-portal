@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Results;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -262,7 +263,7 @@ namespace Mutual.Portal.Web.Controllers
             }
 
             var loginProvider = EnumConverter.ToEnum<UserSocialAccountProviderType>(externalLogin.LoginProvider);
-            var obj = _userService.CheckUseravailability(loginProvider, externalLogin.ProviderKey);
+            var obj = _userService.CheckUseravailability(loginProvider, externalLogin.ProviderKey, externalLogin.UserName, externalLogin.Email);
 
 
             if (obj.MetaData.IsSucceeded)
@@ -296,7 +297,6 @@ namespace Mutual.Portal.Web.Controllers
         [Route("ExternalRegister", Name = "ExternalRegister")]
         public async Task<IHttpActionResult> GetExternalRegister(string provider, int employerType, string error = null)
         {
-
             if (error != null)
             {
                 return Redirect(Url.Content("~/") + "#error=" + Uri.EscapeDataString(error));
@@ -327,10 +327,11 @@ namespace Mutual.Portal.Web.Controllers
             {
                 Email = externalLogin.Email,
                 EmploymentType = employerType,
-                Guid = new Guid(),
+                Guid = Guid.NewGuid(),
                 Id = 0,
                 IsActive = true,
                 IsDeleted = false,
+                IsRegistrationConfirmed = false,
                 MyCurrentViewCount = 0,
                 MyTotalViewCount = 0,
                 LastLoginOn = DateTime.Now,
@@ -341,8 +342,16 @@ namespace Mutual.Portal.Web.Controllers
                 State = (int)UserStates.Free,
             };
 
-            var responseObj = _userService.RegisterUser(userDto);
-            return _getHttpClientResponse(responseObj);
+            IEnumerable<Claim> claims = externalLogin.GetClaims();
+            ClaimsIdentity identity = new ClaimsIdentity(claims, OAuthDefaults.AuthenticationType);
+
+            identity.AddClaim(new Claim(ClaimTypes.SerialNumber, externalLogin.ProviderKey));
+            identity.AddClaim(new Claim("socialAccountProvider", externalLogin.LoginProvider));
+
+            Authentication.SignIn(identity);
+
+            //var responseObj = _userService.RegisterUser(userDto);
+            return Ok();
         }
 
         // GET api/Account/ExternalLogins?returnUrl=%2F&generateState=true

@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.Facebook;
 using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
@@ -66,6 +67,15 @@ namespace Mutual.Portal.Web
             app.UseFacebookAuthentication(
                 appId: "1383455475049155",
                 appSecret: "39a550ec1c3cf2839bf7d821d8a412de");
+
+            app.UseFacebookAuthentication(new FacebookAuthenticationOptions
+            {
+                AppId = "1383455475049155",
+                AppSecret = "39a550ec1c3cf2839bf7d821d8a412de",
+                BackchannelHttpHandler = new FacebookBackChannelHandler(),
+                UserInformationEndpoint = "https://graph.facebook.com/v2.4/me?fields=id,name,email,first_name,last_name,location",
+                Scope = { "email" }
+            });
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {

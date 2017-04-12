@@ -7,7 +7,99 @@
 <div ng-controller="registerCtrl as vm">
     <h2>Register</h2>
 
-    <button ng-click="vm.registerWithSocial('Facebook', 1)">Login ith Facebook</button>
-    <button ng-click="vm.registerWithSocial('Google', 1)">Login ith Google</button>
+    @*<button ng-click="vm.registerWithSocial('Facebook', 1)">Login ith Facebook</button>
+    <button ng-click="vm.registerWithSocial('Google', 1)">Login ith Google</button>*@
+
+    <!-- EMPLOYEE SELECTION PANEL START-->
+    <div ng-if="vm.selectedEmployeeType == 0">
+        <div class="row">
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail" style="text-align: center">
+                    <i class="fa fa-user-md fa-5x"></i>
+                    <div class="caption">
+                        <h3>Register as a N</h3>
+                        <p>To register as an employee, you need to follow the following buttons</p>
+                        <p>
+                            <a href="" ng-click="vm.selectEmployeeType(1)" class="btn btn-primary" role="button">Register</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail" style="text-align: center">
+                    <i class="fa fa-graduation-cap fa-5x"></i>
+                    <div class="caption">
+                        <h3>Register as a T</h3>
+                        <p>To register as an employee, you need to follow the following buttons</p>
+                        <p>
+                            <a href="" ng-click="vm.selectEmployeeType(2)" class="btn btn-primary" role="button">Register</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail" style="text-align: center">
+                    <i class="fa fa-building fa-5x"></i>
+                    <div class="caption">
+                        <h3>Register as a G</h3>
+                        <p>To register as an employee, you need to follow the following buttons</p>
+                        <p>
+                            <a href="" ng-click="vm.selectEmployeeType(3)" class="btn btn-primary" role="button">Register</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- EMPLOYEE SELECTION PANEL END-->
+
+    <div ng-if="vm.selectedEmployeeType != 0">
+        <div class="row">
+            <div class="container">
+                <form data-toggle="validator" role="form" ng-submit="vm.register()">
+                    <div class="form-group row">
+                        <label for="employeeType" class="col-sm-2 col-form-label">Registering as</label>
+                        <div class="col-sm-10">
+                            <select id="employeeType" class="form-control"
+                                    ng-model="vm.selectedEmployeeType"
+                                    ng-options="type.value as type.text for type in vm.employeeTypeList">
+                            </select>
+                            </div>
+                        </div>
+                    <div class="form-group row">
+                        <label for="userName" class="col-sm-2 col-form-label">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="userName" ng-model="vm.name" placeholder="Your Name" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="mobileNumber" class="col-sm-2 col-form-label">Mobile Number</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="mobileNumber"
+                                   ng-model="vm.mobileNumber"
+                                   placeholder="Your Mobile number"
+                                   pattern="[0][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]"
+                                   required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="telephoneNumber" class="col-sm-2 col-form-label">Telephone Number</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="telephoneNumber"
+                                   ng-model="vm.telephoneNumber"
+                                   placeholder="Your Telephone Number"
+                                   pattern="[0][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="telephoneNumber" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Save Details</button>  
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 

@@ -10,5 +10,7 @@ namespace Mutual.Portal.Utility.Constants.Messages
     {
         public const string USER_NOT_FOUND = "User not found";
         public const string USER_ALREADY_EXIST = "You have already registered";
+
+        public const string HOSPITAL_NOT_FOUND = "Requested hospital not found";
     }
 }

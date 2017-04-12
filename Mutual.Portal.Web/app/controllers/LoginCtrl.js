@@ -46,7 +46,18 @@
                         localStorageService.set("user_access_token", accessToken);
                         userService.getUserInfo().then(function (s) {
                             localStorageService.set("user_info", s.data.data);
-                            window.location = '/userdashboard';
+                            debugger;
+                            if (!s.data.data.isRegistrationConfirmed) {
+                                window.location = '/register';
+                            } else if (!s.data.data.isEmployeeDetailesProvided) {
+                                if (s.data.data.employmentType === 1) {
+                                    // This is a nurse.
+                                    window.location = '/nursingEmployeeDetail';
+                                }
+                            } else {
+                                window.location = '/userDashboard';
+                            }
+                            
                         }, function(f) {
                             console.log(f);
                         });

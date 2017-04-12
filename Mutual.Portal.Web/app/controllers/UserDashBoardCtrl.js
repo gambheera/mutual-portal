@@ -15,10 +15,7 @@
         };
 
         function init() {
-
-            $scope.$parent.username = userService.authenticateCurrentPosition();
-            debugger;
-            
+            $scope.$parent.username = userService.authenticateCurrentPosition();            
         };
 
         init();

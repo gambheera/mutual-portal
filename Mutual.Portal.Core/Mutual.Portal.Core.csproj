@@ -95,6 +95,22 @@
     <Compile Include="Migrations\201703230333483_3-23-8-53-a.Designer.cs">
       <DependentUpon>201703230333483_3-23-8-53-a.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704100549360_4-10-11-19-a.cs" />
+    <Compile Include="Migrations\201704100549360_4-10-11-19-a.Designer.cs">
+      <DependentUpon>201704100549360_4-10-11-19-a.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704100730474_4-10-1-00-p.cs" />
+    <Compile Include="Migrations\201704100730474_4-10-1-00-p.Designer.cs">
+      <DependentUpon>201704100730474_4-10-1-00-p.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704110848126_4-11-2-17-p.cs" />
+    <Compile Include="Migrations\201704110848126_4-11-2-17-p.Designer.cs">
+      <DependentUpon>201704110848126_4-11-2-17-p.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704121425282_4-12-7-55-p.cs" />
+    <Compile Include="Migrations\201704121425282_4-12-7-55-p.Designer.cs">
+      <DependentUpon>201704121425282_4-12-7-55-p.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Persistence\IDbContext.cs" />
     <Compile Include="Persistence\IOperationDbContext.cs" />
@@ -125,6 +141,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703230333483_3-23-8-53-a.resx">
       <DependentUpon>201703230333483_3-23-8-53-a.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704100549360_4-10-11-19-a.resx">
+      <DependentUpon>201704100549360_4-10-11-19-a.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704100730474_4-10-1-00-p.resx">
+      <DependentUpon>201704100730474_4-10-1-00-p.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704110848126_4-11-2-17-p.resx">
+      <DependentUpon>201704110848126_4-11-2-17-p.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704121425282_4-12-7-55-p.resx">
+      <DependentUpon>201704121425282_4-12-7-55-p.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Http;
+using Mutual.Portal.Service.BusinessLogic.UserManagement.Dto;
 
 namespace Mutual.Portal.Web.Controllers.BusinessApi
 {
@@ -22,6 +23,7 @@ namespace Mutual.Portal.Web.Controllers.BusinessApi
         }
 
         [Authorize]
+        [HttpGet]
         [Route("get-user-status-by-guid")]
         public IHttpActionResult GetUserStatusByGuid(string userGuid)
         {
@@ -30,6 +32,7 @@ namespace Mutual.Portal.Web.Controllers.BusinessApi
         }
 
         [Authorize]
+        [HttpGet]
         [Route("get-user-info")]
         public IHttpActionResult GetUserInfo()
         {
@@ -38,12 +41,24 @@ namespace Mutual.Portal.Web.Controllers.BusinessApi
             return _getHttpClientResponse(userObj);
         }
 
-        // [Authorize]
+        [Authorize]
+        [HttpGet]
         [Route("get-user-employee-type")]
         public IHttpActionResult GetUserEmployeeType()
         {
             string guid = _getUserGuid();
             var obj = _userManager.GetUserEmployeeType(guid);
+            return _getHttpClientResponse(obj);
+        }
+   
+        [Authorize]
+        [HttpPut]
+        [Route("confirm-registration")]
+        public IHttpActionResult ConfirmRegistration(UserDto userDto)
+        {
+            string guid = _getUserGuid();
+            userDto.Guid = new Guid(guid);
+            var obj = _userManager.ConfirmRegistration(userDto);
             return _getHttpClientResponse(obj);
         }
 

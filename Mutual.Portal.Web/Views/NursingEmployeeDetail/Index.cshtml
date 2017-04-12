@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div ng-controller="nursingEmployeeDetailCtrl as vm">
+    <h2>Your Details</h2>
+
+    <div class="row">
+        <div class="container">
+            <form data-toggle="validator" role="form" ng-submit="vm.register()">
+                <div class="form-group row">
+                    <label for="userCode" class="col-sm-2 col-form-label">User Code</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="userCode" ng-model="vm.name" placeholder="Your Name" disabled>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="employeeType" class="col-sm-2 col-form-label">Registered as</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="employeeType" ng-model="vm.name" placeholder="Your Name" disabled>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="userName" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="userName" ng-model="vm.name" placeholder="Your Name" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="mobileNumber" class="col-sm-2 col-form-label">Mobile Number</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="mobileNumber"
+                               ng-model="vm.mobileNumber"
+                               placeholder="Your Mobile number"
+                               pattern="[0][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]"
+                               required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="telephoneNumber" class="col-sm-2 col-form-label">Telephone Number</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="telephoneNumber"
+                               ng-model="vm.telephoneNumber"
+                               placeholder="Your Telephone Number"
+                               pattern="[0][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]">
+                    </div>
+                </div>
+
+                <div class="col-xs-12"><hr>
+                </div>
+                <div class="form-group row">
+                    <label for="currentHospital" class="col-sm-2 col-form-label">Current Hospital</label>
+                    <div class="col-sm-10">
+                        <select id="currentHospital" class="form-control"
+                                ng-model="vm.selectedEmployeeType"
+                                ng-options="type.value as type.text for type in vm.employeeTypeList"></select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="dreamHospitals" class="col-sm-2 col-form-label">Dream Hospitals</label>
+                    <div class="col-sm-4">
+                        <select id="dreamHospitals" class="form-control"
+                                ng-model="vm.selectedEmployeeType"
+                                ng-options="type.value as type.text for type in vm.employeeTypeList"></select>
+                        
+                    </div>
+                    <input type="button" class="col-sm-1" value="Add" />
+                    
+                </div>
+                <div class="form-group row">
+                    <label for="telephoneNumber" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary">Save Details</button>
+                    </div>
+                </div>
+
+
+
+            </form>
+        </div>
+    </div>
+</div>
+

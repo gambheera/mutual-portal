@@ -13,23 +13,27 @@ namespace Mutual.Portal.Service.BusinessLogic.UserManagement
 {
     public class UserManager : IUserManager
     {
-        private IOperationDbContext _operationContext;
+        private readonly IOperationDbContext _operationContext;
 
         public UserManager(IOperationDbContext operationContext)
         {
             _operationContext = operationContext;
         }
 
-        public ResponseObject CheckUseravailability(UserSocialAccountProviderType userAuthenticationType, string socialId)
+        public ResponseObject CheckUseravailability(UserSocialAccountProviderType userAuthenticationType, string socialId, string name, string email)
         {
+            
             try
             {
                 var userObj =  _operationContext.Set<User>().FirstOrDefault(u => u.SocialId == socialId && u.SocialAccountProvider == (int)userAuthenticationType);
 
                 if (userObj == null)
                 {
-                    var errObj = ResponseManager.GetLogicalErrorResponse(ErrorMessages.USER_NOT_FOUND, "ERR-0001", ResponseType.InternalServerError);
-                    return errObj;
+                    //var errObj = ResponseManager.GetLogicalErrorResponse(ErrorMessages.USER_NOT_FOUND, "ERR-0001", ResponseType.InternalServerError);
+                    //return errObj;
+
+                    var returnedObj = _registerWhileLogin(userAuthenticationType, socialId, name, email);
+                    return returnedObj;
                 }
 
                 var obj = ResponseManager.GetSuccessResponse(UserDto.GetDto(userObj), SuccessMessages.SUCCESSFULLY_FECHED, ResponseType.Ok);
@@ -70,23 +74,32 @@ namespace Mutual.Portal.Service.BusinessLogic.UserManagement
             throw new NotImplementedException();
         }
 
-        public ResponseObject RegisterUser(UserDto userDto)
+        public ResponseObject ConfirmRegistration(UserDto userDto)
         {
             try
             {
-                var existingUser = _operationContext.Set<User>().FirstOrDefault(u => u.SocialId == userDto.SocialId);
+                var existingUser = _operationContext.Set<User>().FirstOrDefault(u => u.Guid == userDto.Guid);
 
-                if (existingUser != null)
+                if (existingUser == null)
                 {
-                    var errObj = ResponseManager.GetLogicalErrorResponse(ErrorMessages.USER_ALREADY_EXIST, "ERR-0003", ResponseType.InternalServerError);
+                    var errObj = ResponseManager.GetLogicalErrorResponse(ErrorMessages.USER_NOT_FOUND, "ERR-0003", ResponseType.InternalServerError);
                     return errObj;
                 }
 
-                var userBo = UserDto.GetBo(userDto);
-                _operationContext.Set<User>().Add(userBo);
+                existingUser.EmploymentType = userDto.EmploymentType;
+                existingUser.Code = _generateUserCode(userDto.EmploymentType, existingUser.SocialAccountProvider);
+                existingUser.ContactNumber1 = userDto.ContactNumber1;
+                existingUser.ContactNumber2 = userDto.ContactNumber2;
+                existingUser.Name = userDto.Name;
+                existingUser.IsRegistrationConfirmed = true;
+                existingUser.IsEmployeeDetailesProvided = false;
+                existingUser.LastLoginOn = DateTime.Now;
+                
                 _operationContext.Save();
 
-                var obj = ResponseManager.GetSuccessResponse(userDto, SuccessMessages.USER_CREATED_SUCCESSFULLY, ResponseType.Created);
+                var returningDtoObj = UserDto.GetDto(existingUser);
+
+                var obj = ResponseManager.GetSuccessResponse(returningDtoObj, SuccessMessages.USER_CREATED_SUCCESSFULLY, ResponseType.Ok);
                 return obj;
             }
             catch (Exception ex)
@@ -95,7 +108,7 @@ namespace Mutual.Portal.Service.BusinessLogic.UserManagement
                 return expObj;
             }
         }
-
+        
         public ResponseObject GetUserInfo(string userGuid)
         {
             try
@@ -114,5 +127,61 @@ namespace Mutual.Portal.Service.BusinessLogic.UserManagement
                 return expObj;
             }
         }
+
+        #region Private Methods
+
+        private string _generateUserCode(int employeeType, int socialAccountType)
+        {
+            int maxId = _operationContext.Set<User>().Max(u => u.Id);
+            var theUser = _operationContext.Set<User>().FirstOrDefault(u => u.Id == maxId);
+
+            if (theUser == null)
+            {
+                return "00000000";
+            }
+
+            string maxCode = theUser.Code.Substring(2, theUser.Code.Length - 2);
+
+            int maxNumber = int.Parse(maxCode);
+
+            string tail = (maxNumber + 1).ToString("D6");
+
+            string userCode = employeeType + "" + socialAccountType + tail;
+
+            return userCode;
+        }
+
+        private ResponseObject _registerWhileLogin(UserSocialAccountProviderType userAuthenticationType, string socialId, string name, string email)
+        {
+            try
+            {
+                var obj = new User()
+                {
+                    Guid = Guid.NewGuid(),
+                    Email = email,
+                    Name = name,
+                    IsActive = false,
+                    IsDeleted = false,
+                    LastLoginOn = DateTime.Now,
+                    RegisteredOn = DateTime.Now,
+                    IsRegistrationConfirmed = false,
+                    EmploymentType = 0,
+                    SocialAccountProvider = (int)userAuthenticationType,
+                    SocialId = socialId
+                };
+
+                _operationContext.Set<User>().Add(obj);
+                _operationContext.Save();
+
+                return ResponseManager.GetSuccessResponse(null, SuccessMessages.USER_CREATED_SUCCESSFULLY, ResponseType.Created);
+            }
+            catch (Exception ex)
+            {
+                var expObj = ResponseManager.GetExceptionResponse(ExceptionMessages.OPERATION_FAILED, ex, "EXP-0004", ResponseType.InternalServerError);
+                return expObj;
+            }
+        }
+
+        #endregion
     }
 }
