@@ -91,7 +91,7 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement
                 if (existingNurse == null)
                 {
                     // This is a new user needs to insert the details and return
-                   var savedObj = _internalNurseSave(nurseDto);
+                   var savedObj = _internalNurseSave(nurseDto, userGuid);
                     return savedObj;
                 }
 
@@ -106,13 +106,122 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement
             }
         }
 
-        #region
-
-        private ResponseObject _internalNurseSave(NurseDto nurseDto)
+        public ResponseObject SearchNurses(int currentHospitalId, int dreamHospitalId, int pageNumber)
         {
             try
             {
-                var userBo = UserDto.GetBo(nurseDto.User);
+                if (pageNumber < 0)
+                {
+                    var errObj = ResponseManager.GetLogicalErrorResponse(ErrorMessages.INVALID__PAGE_NUMBER, "ERR-0008", ResponseType.InternalServerError);
+                    return errObj;
+                }
+
+                List<Nurse> filteredNurseBoList;
+
+                const int numberOfItems = 20;
+                int startPosition = numberOfItems*(pageNumber - 1);
+                
+
+                if (currentHospitalId == 0 && dreamHospitalId == 0)
+                {
+                    filteredNurseBoList = _operationContext.Set<Nurse>()
+                        .Include(n => n.User)
+                        .Include(n => n.Hospital)
+                        .Include(n => n.DreamHospitalList)
+                        .OrderByDescending(n => n.User.LastLoginOn)
+                        .Skip(startPosition).Take(numberOfItems)
+                        .ToList();
+                }else if (currentHospitalId == 0 && dreamHospitalId != 0)
+                {
+                    filteredNurseBoList = _operationContext.Set<Nurse>()
+                        .Include(n => n.User)
+                        .Include(n => n.Hospital)
+                        .Include(n => n.DreamHospitalList)
+                        .Where(n => n.DreamHospitalList.Any(d => d.Hospital.Id == dreamHospitalId))
+                        .OrderByDescending(n => n.User.LastLoginOn)
+                        .Skip(startPosition).Take(numberOfItems)
+                        .ToList();
+                }else if (currentHospitalId != 0 && dreamHospitalId == 0)
+                {
+                    filteredNurseBoList = _operationContext.Set<Nurse>()
+                        .Include(n => n.User)
+                        .Include(n => n.Hospital)
+                        .Include(n => n.DreamHospitalList)
+                        .Where(n => n.Hospital.Id == currentHospitalId)
+                        .OrderByDescending(n => n.User.LastLoginOn)
+                        .Skip(startPosition).Take(numberOfItems)
+                        .ToList();
+                }
+                else
+                {
+                    filteredNurseBoList = _operationContext.Set<Nurse>()
+                        .Include(n => n.User)
+                        .Include(n => n.Hospital)
+                        .Include(n => n.DreamHospitalList)
+                        .Where(
+                            n =>
+                                n.Hospital.Id == currentHospitalId &&
+                                n.DreamHospitalList.Any(d => d.Hospital.Id == dreamHospitalId))
+                        .OrderByDescending(n => n.User.LastLoginOn)
+                        .Skip(startPosition).Take(numberOfItems)
+                        .ToList();
+                }
+
+                var filteredNurseDtoList = new List<NurseDto>();
+
+                foreach (var nurseBo in filteredNurseBoList)
+                {
+                    var tempNurseDto = NurseDto.GetDto(nurseBo);
+                    var dreamHospitalDtoList = (from dreamHospitalBo in nurseBo.DreamHospitalList
+                        where dreamHospitalBo.IsActive
+                        select DreamHospitalDto.GetDto(dreamHospitalBo))
+                        .ToList();
+
+                    tempNurseDto.DreamHospitalList = dreamHospitalDtoList;
+
+                    // Removing contact and sensitive data
+                    string tempContact1FirstThreeCharacteres = tempNurseDto.User.ContactNumber1.Substring(0, 3);
+                    string tempContact2FirstThreeCharacteres = tempNurseDto.User.ContactNumber2.Substring(0, 3);
+                    tempNurseDto.User.ContactNumber1 = tempContact1FirstThreeCharacteres + "-XXXXXXX";
+                    tempNurseDto.User.ContactNumber2 = tempContact2FirstThreeCharacteres + "-XXXXXXX";
+
+                    tempNurseDto.User.Guid = new Guid();
+                    tempNurseDto.User.Name = "XXXX XXXXXXXXXX";
+                    tempNurseDto.User.Email = "xxxxx@xxxx.com";
+                    tempNurseDto.User.SocialAccountProvider = 0;
+                    tempNurseDto.User.SocialId = "************";
+
+                    filteredNurseDtoList.Add(tempNurseDto);
+                }
+
+                var expObj = ResponseManager.GetSuccessResponse(filteredNurseDtoList, SuccessMessages.SUCCESSFULLY_FECHED, ResponseType.Ok);
+                return expObj;
+            }
+            catch (Exception ex)
+            {
+                var expObj = ResponseManager.GetExceptionResponse(ExceptionMessages.OPERATION_FAILED, ex, "EXP-0004", ResponseType.InternalServerError);
+                return expObj;
+            }
+        }
+
+        #region Private Methods
+
+        private ResponseObject _internalNurseSave(NurseDto nurseDto, string userGuid)
+        {
+            try
+            {
+                var userBo = _operationContext.Set<User>().FirstOrDefault(u => u.Guid.ToString() == userGuid);
+
+                if (userBo == null)
+                {
+                    var errObj = ResponseManager.GetLogicalErrorResponse(ErrorMessages.USER_NOT_FOUND, "ERR-0008", ResponseType.InternalServerError);
+                    return errObj;
+                }
+
+                userBo.Name = nurseDto.User.Name;
+                userBo.ContactNumber1 = nurseDto.User.ContactNumber1;
+                userBo.ContactNumber2 = nurseDto.User.ContactNumber2;
+
                 var hospitalBo = HospitalDto.GetBo(nurseDto.Hospital);
                 var nurseBo = NurseDto.GetBo(nurseDto, hospitalBo, userBo);
 
@@ -122,8 +231,11 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement
                 {
                     var dreamHospitalHospitalBo = HospitalDto.GetBo(dreamHospital.Hospital);
                     var dreamHospitalBo = DreamHospitalDto.GetBo(dreamHospital, dreamHospitalHospitalBo, nurseBo);
+                    dreamHospitalBo.IsActive = true;
                     nurseBo.DreamHospitalList.Add(dreamHospitalBo);
                 }
+
+                nurseBo.User.IsEmployeeDetailesProvided = true;
 
                 _operationContext.Set<Nurse>().Add(nurseBo);
                 _operationContext.Save();
@@ -142,6 +254,12 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement
         {
             try
             {
+                if (nurseDto.DreamHospitalList.Count <= 0)
+                {
+                    var errObj = ResponseManager.GetLogicalErrorResponse(ErrorMessages.DREAM_HOSPITAL_LIST_LENGTH_INVALID, "ERR-0008", ResponseType.InternalServerError);
+                    return errObj;
+                }
+
                 var existingNurse = _operationContext.Set<Nurse>()
                     .Include(n=>n.User)
                     .Include(n=>n.Hospital)
@@ -153,6 +271,8 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement
                     var errObj = ResponseManager.GetLogicalErrorResponse(ErrorMessages.USER_NOT_FOUND, "ERR-0008", ResponseType.InternalServerError);
                     return errObj;
                 }
+
+               
 
                 var existingHospital = _operationContext.Set<Hospital>().FirstOrDefault(h => h.Id == nurseDto.Hospital.Id);
 
@@ -168,8 +288,12 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement
 
                 existingNurse.Hospital = existingHospital;
 
-                existingNurse.DreamHospitalList.Clear();
-                existingNurse.DreamHospitalList = new List<DreamHospital>();
+                foreach (var dreamHospitalBo in existingNurse.DreamHospitalList.ToList())
+                {
+                    dreamHospitalBo.IsActive = false;
+                }
+
+
 
                 foreach (var dreamHospitalDto in nurseDto.DreamHospitalList)
                 {
@@ -179,9 +303,12 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement
 
                     var dreamHospitalBo = DreamHospitalDto.GetBo(dreamHospitalDto, existingDreamHospitalHospital, existingNurse);
 
-                    existingNurse.DreamHospitalList.Add(dreamHospitalBo);
-                }
+                    dreamHospitalBo.IsActive = true;
 
+                    existingNurse.DreamHospitalList.Add(dreamHospitalBo);
+                    //_operationContext.Set<DreamHospital>().Add(dreamHospitalBo);
+                }
+                existingNurse.User.IsEmployeeDetailesProvided = true;
                 _operationContext.Save();
 
                 var obj = ResponseManager.GetSuccessResponse(null, SuccessMessages.NURSE_UPDATED_SUCCESSFULLY, ResponseType.Ok);
@@ -202,7 +329,10 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement
                     .Include(n => n.User)
                     .Include(n => n.Hospital)
                     .Include(n => n.DreamHospitalList)
+                    // .Where(d=>d.DreamHospitalList)
                     .FirstOrDefault(n => n.User.Guid.ToString() == myGuid);
+
+
 
                 if (existingNurse != null)
                 {
@@ -210,6 +340,11 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement
                     var hospitalDto = HospitalDto.GetDto(existingNurse.Hospital);
                     var userDto = UserDto.GetDto(existingNurse.User);
                     var dreamHospitalDtoList = existingNurse.DreamHospitalList.Select(DreamHospitalDto.GetDto).ToList();
+
+                    foreach (var dreamHospital in dreamHospitalDtoList.ToList().Where(dreamHospital => !dreamHospital.IsActive))
+                    {
+                        dreamHospitalDtoList.Remove(dreamHospital);
+                    }
 
                     nurseDto.User = userDto;
                     nurseDto.Hospital = hospitalDto;
@@ -221,22 +356,21 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement
 
                 // if existing user is null means, he is being registered.
                 var existingUser = _operationContext.Set<User>().FirstOrDefault(n => n.Guid.ToString() == myGuid);
-                var virtualNurse = new NurseDto();
-                virtualNurse.User = UserDto.GetDto(existingUser);
-                virtualNurse.Hospital = new HospitalDto();
-                virtualNurse.DreamHospitalList = new List<DreamHospitalDto>();
+                var virtualNurse = new NurseDto
+                {
+                    User = UserDto.GetDto(existingUser),
+                    Hospital = new HospitalDto(),
+                    DreamHospitalList = new List<DreamHospitalDto>()
+                };
 
                 var returningObj = ResponseManager.GetSuccessResponse(virtualNurse, SuccessMessages.SUCCESSFULLY_FECHED, ResponseType.Ok);
                 return returningObj;
-
             }
             catch (Exception ex)
             {
                 var expObj = ResponseManager.GetExceptionResponse(ExceptionMessages.OPERATION_FAILED, ex, "EXP-0004", ResponseType.InternalServerError);
                 return expObj;
             }
-
-            return null;
         }
 
         #endregion

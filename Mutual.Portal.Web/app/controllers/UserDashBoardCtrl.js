@@ -2,7 +2,7 @@
 (function () {
     'use strict';
 
-    function userDashBoardCtrl($scope, $rootScope, userService) {
+    function userDashBoardCtrl($scope, userService) {
         var vm = this;
         vm.title = 'Homepage';
 
@@ -21,7 +21,7 @@
         init();
     }
 
-    userDashBoardCtrl.$inject = ['$scope', '$rootScope', 'userService'];
+    userDashBoardCtrl.$inject = ['$scope', 'userService'];
 
     angular.module('mutualApp').controller('userDashBoardCtrl', userDashBoardCtrl);
 

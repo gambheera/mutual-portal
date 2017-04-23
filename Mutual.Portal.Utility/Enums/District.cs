@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Mutual.Portal.Utility.Enums
 {
-    public enum Districts
+    public enum District
     {
         Ampara = 1,
         Anuradhapura = 2,

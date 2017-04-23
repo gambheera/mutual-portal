@@ -12,5 +12,10 @@ namespace Mutual.Portal.Utility.Constants.Messages
         public const string USER_ALREADY_EXIST = "You have already registered";
 
         public const string HOSPITAL_NOT_FOUND = "Requested hospital not found";
+
+        public const string DREAM_HOSPITAL_LIST_LENGTH_INVALID = "Dream hospitals not found";
+
+        public const string INVALID__PAGE_NUMBER = "Requested page is not valid";
+
     }
 }

@@ -8,17 +8,17 @@
 
     <div class="row">
         <div class="container">
-            <form data-toggle="validator" role="form" ng-submit="vm.register()">
+            <form data-toggle="validator" role="form" ng-submit="vm.saveEmployeeDetails()">
                 <div class="form-group row">
                     <label for="userCode" class="col-sm-2 col-form-label">User Code</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="userCode" ng-model="vm.name" placeholder="Your Name" disabled>
+                        <input type="text" class="form-control" id="userCode" ng-model="vm.userCode" placeholder="Your Name" disabled>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="employeeType" class="col-sm-2 col-form-label">Registered as</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="employeeType" ng-model="vm.name" placeholder="Your Name" disabled>
+                        <input type="text" class="form-control" id="employeeType" placeholder="Your Name" value="Nurse" disabled>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -52,22 +52,35 @@
                 <div class="form-group row">
                     <label for="currentHospital" class="col-sm-2 col-form-label">Current Hospital</label>
                     <div class="col-sm-10">
-                        <select id="currentHospital" class="form-control"
-                                ng-model="vm.selectedEmployeeType"
-                                ng-options="type.value as type.text for type in vm.employeeTypeList"></select>
+                        <select id="currentHospital" class="form-control" ng-change="vm.currentHospitalChangeEvent()"
+                                ng-model="vm.currentHospital"
+                                ng-options="hospital as hospital.name for hospital in vm.hospitalList"></select>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="dreamHospitals" class="col-sm-2 col-form-label">Dream Hospitals</label>
                     <div class="col-sm-4">
                         <select id="dreamHospitals" class="form-control"
-                                ng-model="vm.selectedEmployeeType"
-                                ng-options="type.value as type.text for type in vm.employeeTypeList"></select>
-                        
+                                ng-model="vm.selectedMyDreamHospital"
+                                ng-options="hospital as hospital.name for hospital in vm.dreamHospitalList"></select>
+
                     </div>
-                    <input type="button" class="col-sm-1" value="Add" />
+                    <input type="button" class="col-sm-1" value="Add" ng-click="vm.addHospitalToMyDreamHospitalList()"/>
+
+                </div>
+
+
+                <div class="form-group row">
+                    <label for="dreamHospitals" class="col-sm-2 col-form-label">Dream Hospitals</label>
+                    <div class="col-sm-4">
+                        <div class="chip" ng-repeat="dreamHospital in vm.myDreamHospitalList">
+                            {{dreamHospital.hospital.name}} - {{dreamHospital.hospital.districtString}}
+                            <span class="closebtn" ng-click="vm.removeHospitalFromMyDreamHospitalList(dreamHospital)">&times;</span>
+                        </div>
+                    </div>
                     
                 </div>
+
                 <div class="form-group row">
                     <label for="telephoneNumber" class="col-sm-2 col-form-label"></label>
                     <div class="col-sm-10">

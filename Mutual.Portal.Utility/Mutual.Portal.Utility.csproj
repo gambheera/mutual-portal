@@ -43,8 +43,8 @@
     <Compile Include="Constants\Messages\ErrorMessages.cs" />
     <Compile Include="Constants\Messages\ExceptionMessages.cs" />
     <Compile Include="Constants\Messages\SuccessMessages.cs" />
-    <Compile Include="Enums\Districts.cs" />
-    <Compile Include="Enums\HospitalTypes.cs" />
+    <Compile Include="Enums\District.cs" />
+    <Compile Include="Enums\HospitalType.cs" />
     <Compile Include="Enums\NotificationTypes.cs" />
     <Compile Include="Enums\ResponseTypes.cs" />
     <Compile Include="Enums\UserTypes.cs" />

@@ -233,6 +233,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\ViewControlers\LoginController.cs" />
+    <Compile Include="Controllers\ViewControlers\NurseListController.cs" />
     <Compile Include="Controllers\ViewControlers\NursingEmployeeDetailController.cs" />
     <Compile Include="Controllers\ViewControlers\RegisterController.cs" />
     <Compile Include="Controllers\ViewControlers\UserDashboardController.cs" />
@@ -253,6 +254,7 @@
     <Content Include="app\app.js" />
     <Content Include="app\controllers\homeCtrl.js" />
     <Content Include="app\controllers\loginCtrl.js" />
+    <Content Include="app\controllers\nurseListCtrl.js" />
     <Content Include="app\controllers\nursingEmployeeDetailCtrl.js" />
     <Content Include="app\controllers\registerCtrl.js" />
     <Content Include="app\controllers\userDashBoardCtrl.js" />
@@ -342,6 +344,7 @@
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\UserDashboard\Index.cshtml" />
     <Content Include="Views\NursingEmployeeDetail\Index.cshtml" />
+    <Content Include="Views\NurseList\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

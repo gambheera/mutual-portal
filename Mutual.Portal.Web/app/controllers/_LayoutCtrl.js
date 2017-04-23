@@ -2,10 +2,10 @@
 (function () {
     'use strict';
 
-    function _layoutCtrl($scope, $rootScope, userService) {
+    function _layoutCtrl($scope, localStorageService, userService) {
         var vm = this;
         $scope.title = 'Homepage';
-        $scope.username = "";
+        $scope.username = undefined;
 
         vm.logout = function() {
             var result = userService.logout();
@@ -15,13 +15,24 @@
             }
         };
 
-        vm.gotoLogin = function () {
+        vm.gotoLogin = function() {
             debugger;
             window.location = '/login';
-        }
+        };
+
+        vm.gotoMyProfile = function () {
+            var userInfo = localStorageService.get('user_info');
+
+            if (userInfo) {
+                if (userInfo.employmentType === 1) {
+                    window.location = '/nursingEmployeeDetail';
+                }
+
+            }
+        };
     }
 
-    _layoutCtrl.$inject = ['$scope', '$rootScope', 'userService'];
+    _layoutCtrl.$inject = ['$scope', 'localStorageService', 'userService'];
 
      angular.module('mutualApp').controller('_layoutCtrl', _layoutCtrl);
 })();

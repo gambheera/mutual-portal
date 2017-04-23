@@ -64,6 +64,7 @@ namespace Mutual.Portal.Core.Persistence
             modelBuilder.Entity<User>().HasKey(r => r.Id);
             modelBuilder.Entity<Hospital>().HasKey(r => r.Id);
             modelBuilder.Entity<Nurse>().HasKey(r => r.Id);
+            modelBuilder.Entity<DreamHospital>().HasKey(r => r.Id);
         }
 
     }

@@ -20,5 +20,7 @@ namespace Mutual.Portal.Core.Entities.Nursing
         [Required]
         [Index("DreamHospital_CandidateKey_1", 2, IsUnique = true)]
         public Hospital Hospital { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

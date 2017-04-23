@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Mutual.Portal.Utility.Enums
 {
-    public enum HospitalTypes
+    public enum HospitalType
     {
         National = 1,
         Teaching = 2,

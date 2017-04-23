@@ -74,14 +74,18 @@
         };
 
         var checkThisPageAccessEligibility = function() {
-            //var token = localStorageService.get("user_access_token");
+            var userInfo = localStorageService.get("user_info");
 
-            //// Go back if the user is a logen in one.
-            //if (token) window.history.back();
+            if (userInfo) {
+                if (userInfo.isEmployeeDetailesProvided) {
+                    window.location = '/userdashboard';
+                }
+            }
         };
 
         var init = function () {
             $scope.$parent.username = userService.authenticateCurrentPosition();
+            checkThisPageAccessEligibility();
         };
 
         init();

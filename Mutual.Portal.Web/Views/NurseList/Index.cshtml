@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="nurseListCtrl as vm">
+    <h2>Index</h2>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <label class="col-sm-2">Current Hospital</label>
+                <div class="col-sm-3">
+                    <select id="currentHospital" class="form-control"
+                            ng-model="vm.currentHospital"
+                            ng-options="hospital as hospital.name for hospital in vm.hospitalList">
+                    </select>
+                </div>
+                <div class="col-sm-1"></div>
+                <label class="col-sm-2">Dream Hospital</label>
+                <div class="col-sm-3">
+                    <select id="dreamHospital" class="form-control"
+                            ng-model="vm.dreamHospital"
+                            ng-options="hospital as hospital.name for hospital in vm.hospitalList"></select>
+                </div>
+                <div class="col-sm-1">
+                    <button type="button" class="btn btn-primary" ng-click="vm.searchNurses()">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+
+            <div class="row">
+                <div ng-repeat="nurse in vm.searchedResultList">
+                    <div class="col-sm-4">
+                        <div class="ui card">
+                            <div class="content">
+                                <span class="right floated star">
+                                        Favorite
+                                    </span>
+                                <i class="right"></i>
+                                <div class="header">Code: {{nurse.code}}</div>
+                                <hr/>
+                                <div class="description">
+                                    <p>{{nurse.description | cut: true: 40: ' ...'}}</p>
+                                </div>
+                            </div>
+                            <div class="extra content" style="background-color: ghostwhite">
+                                <span class="left">
+                                        <i class=""></i>
+                                    <a href="">Last Login: {{nurse.lastLogin}}</a>
+                                    </span>
+                                <span class="right floated star">
+                                        <i class=""></i>
+                                        <a href="">View Profile</a>
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <hr/>
+
+        <div class="row">
+            <div class="col col-sm-4"></div>
+            <div class="col col-sm-4" style="text-align: center">
+                <button type="button" class="btn btn-primary btn-lg" ng-click="vm.previousPage()"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                <button type="button" class="btn btn-secondary btn-lg">{{vm.pageNumber}}</button>
+                <button type="button" class="btn btn-primary btn-lg" ng-click="vm.nextPage()"><i class="glyphicon glyphicon-chevron-right"></i></button>
+            </div>
+            <div class="col col-sm-4"></div>
+        </div>
+    </div>
+
+</div>

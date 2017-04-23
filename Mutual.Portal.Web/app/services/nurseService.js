@@ -13,11 +13,26 @@
             return httpService.get('/api/nurse/get-individual-nurse?requesteeGuid=' + requesteeGuid).then(function(respond) {
                 return respond;
             });
-        }
+        };
+
+        function saveNurse(nurseObj) {
+            return httpService.post('/api/nurse/save-nurse', nurseObj).then(function (response) {
+                return response;
+            });
+        };
+
+        function searchNurses(currentHospitalId, dreamHospitalId, pageNumber) {
+            var url = '/api/nurse/search-nurses?currentHospitalId=' + currentHospitalId + '&dreamHospitalId=' + dreamHospitalId + '&pageNumber=' + pageNumber;
+            return httpService.get(url).then(function (response) {
+                return response;
+            });
+        };
 
         var service = {
             getIndividualUserDetails: getIndividualUserDetails,
-            getHospitalList: getHospitalList
+            getHospitalList: getHospitalList,
+            saveNurse: saveNurse,
+            searchNurses: searchNurses
         };
 
         return service;

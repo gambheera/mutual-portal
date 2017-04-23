@@ -11,6 +11,7 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement.Dto
         public int Id { get; set; }
         public NurseDto Nurse { get; set; }
         public HospitalDto Hospital { get; set; }
+        public bool IsActive { get; set; }
 
         #endregion
 
@@ -20,7 +21,8 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement.Dto
             {
                 Id = dreamHospital.Id,
                 Hospital = dreamHospital.Hospital != null ? HospitalDto.GetDto(dreamHospital.Hospital) : null,
-                Nurse = dreamHospital.Nurse != null ? NurseDto.GetDto(dreamHospital.Nurse) : null
+                Nurse = dreamHospital.Nurse != null ? NurseDto.GetDto(dreamHospital.Nurse) : null,
+                IsActive = dreamHospital.IsActive
             };
 
             return obj;
@@ -32,7 +34,8 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement.Dto
             {
                 Id = dreamHospitalDto.Id,
                 Hospital = hospital,
-                Nurse = nurse
+                Nurse = nurse,
+                IsActive = dreamHospitalDto.IsActive
             };
 
             return obj;

@@ -29,6 +29,15 @@ namespace Mutual.Portal.Web.Controllers.BusinessApi
         }
 
 
+        [HttpGet]
+        [Authorize]
+        [Route("search-nurses")]
+        public IHttpActionResult SearchNurses(int currentHospitalId, int dreamHospitalId, int pageNumber)
+        {
+            var obj = _nurseManager.SearchNurses(currentHospitalId, dreamHospitalId, pageNumber);
+            return _getHttpClientResponse(obj);
+        }
+
         [HttpPost]
         [Authorize]
         [Route("save-nurse")]

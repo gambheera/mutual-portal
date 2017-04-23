@@ -20,5 +20,10 @@ namespace Mutual.Portal.Utility.Operations
             return (T)Enum.Parse(typeof(T), value, true);
         }
 
+        public static string StringToEnumInt<T>(int i)
+        {
+            T _enum = (T) (object) i;
+            return _enum.ToString().Replace("_", " ");
+        }
     }
 }

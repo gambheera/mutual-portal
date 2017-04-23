@@ -8,6 +8,7 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement
     {
         ResponseObject GetHospitalList();
         ResponseObject SaveNurse(NurseDto nurseDto, string userGuid);
+        ResponseObject SearchNurses(int currentHospitalId, int dreamHospitalId, int pageNumber);
         ResponseObject GetIndividualNurse(string requesteeGuid, string requesterGuid);
         ResponseObject GetNurseListByCurrentHospital(int hospitalId, string requesterGuid);
         ResponseObject GetNurseListByDreamHospital(int hospitalId, string requesterGuid);

@@ -1,4 +1,6 @@
 ﻿using Mutual.Portal.Core.Entities.Nursing;
+using Mutual.Portal.Utility.Operations;
+using Mutual.Portal.Utility.Enums;
 
 namespace Mutual.Portal.Service.BusinessLogic.NurseManagement.Dto
 {
@@ -10,6 +12,8 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement.Dto
         public string Name { get; set; }
         public int District { get; set; }
         public int Category { get; set; }
+        public string DistrictString => EnumConverter.StringToEnumInt<District>(District);
+        public string CategoryString => EnumConverter.StringToEnumInt<HospitalType>(Category);
 
         #endregion
 
