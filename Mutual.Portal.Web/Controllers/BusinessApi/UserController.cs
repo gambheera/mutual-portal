@@ -62,6 +62,16 @@ namespace Mutual.Portal.Web.Controllers.BusinessApi
             return _getHttpClientResponse(obj);
         }
 
+        [Authorize]
+        [HttpGet]
+        [Route("get-user-simple-info")]
+        public IHttpActionResult GetUserSimpleInfo()
+        {
+            string guid = _getUserGuid();
+            var obj = _userManager.GetUserSimpleInfo(guid);
+            return _getHttpClientResponse(obj);
+        }
+
         #region Helpers
 
         private IHttpActionResult _getHttpClientResponse(ResponseObject responseObject)

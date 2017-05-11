@@ -59,6 +59,7 @@
     <Compile Include="BusinessLogic\NurseManagement\INurseManager.cs" />
     <Compile Include="BusinessLogic\NurseManagement\NurseManager.cs" />
     <Compile Include="BusinessLogic\UserManagement\Dto\UserDto.cs" />
+    <Compile Include="BusinessLogic\UserManagement\Dto\UserSimpleInfo.cs" />
     <Compile Include="BusinessLogic\UserManagement\UserManager.cs" />
     <Compile Include="BusinessLogic\UserManagement\IUserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

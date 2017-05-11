@@ -21,6 +21,8 @@
             if (dreamHospitalId === undefined) dreamHospitalId = 0;
 
             nurseService.searchNurses(currentHospitalId, dreamHospitalId, pageNumber).then(function (success) {
+                if (!success.data.metaData.isSucceeded) return;
+
                 var searchedResultList = success.data.data;
                 for (var i = 0; i < searchedResultList.length; i++) {
                     var obj = searchedResultList[i];
@@ -37,7 +39,6 @@
                     }
 
                     var description = "I'm currently woring at " + obj.hospital.name + " (" + obj.hospital.districtString + " district). I'm expecting to go " + hospitalList;
-console.log(obj);
                     var element = {
                         description: description,
                         code: obj.user.code,

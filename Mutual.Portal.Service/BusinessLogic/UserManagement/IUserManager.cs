@@ -12,5 +12,6 @@ namespace Mutual.Portal.Service.BusinessLogic.UserManagement
         ResponseObject ConfirmRegistration(UserDto userDto);
         ResponseObject GetUserEmployeeType(string userGuid);
         ResponseObject GetUserInfo(string userGuid);
+        ResponseObject GetUserSimpleInfo(string userGuid);
     }
 }

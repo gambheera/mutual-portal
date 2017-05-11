@@ -63,7 +63,7 @@ namespace Mutual.Portal.Web.Controllers.BusinessApi
         public IHttpActionResult GetNurseListByCurrentHospital(int hospitalId)
         {
             var obj = _nurseManager.GetNurseListByCurrentHospital(hospitalId, "");
-            return Ok(obj);
+            return _getHttpClientResponse(obj);
         }
 
         [HttpGet]
@@ -72,7 +72,7 @@ namespace Mutual.Portal.Web.Controllers.BusinessApi
         public IHttpActionResult GetNurseListByDreamHospital(int hospitalId)
         {
             var obj = _nurseManager.GetNurseListByDreamHospital(hospitalId, "");
-            return Ok(obj);
+            return _getHttpClientResponse(obj);
         }
 
         [HttpGet]
@@ -82,7 +82,7 @@ namespace Mutual.Portal.Web.Controllers.BusinessApi
         {
             var requesterGuid = _getUserGuid();
             var obj = _nurseManager.GetIndividualProfileDetails(requesteeGuid, requesterGuid);
-            return Ok(obj);
+            return _getHttpClientResponse(obj);
         }
 
         [HttpGet]
@@ -92,7 +92,7 @@ namespace Mutual.Portal.Web.Controllers.BusinessApi
         {
             var requesterGuid = _getUserGuid();
             var obj = _nurseManager.GetContactDetails(requesteeGuid, requesterGuid);
-            return Ok(obj);
+            return _getHttpClientResponse(obj);
         }
 
         #region Helpers

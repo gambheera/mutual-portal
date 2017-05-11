@@ -46,12 +46,20 @@
                 });
         };
 
+        function getUserSimpleInfo() {
+            return httpService.get('api/user/get-user-simple-info')
+                .then(function (response) {
+                    return response;
+                });
+        };
+
         var service = {
             logout: logout,
             authenticateCurrentPosition: authenticateCurrentPosition,
             getUserInfo: getUserInfo,
             getUserEmployeeType: getUserEmployeeType,
-            register: register
+            register: register,
+            getUserSimpleInfo: getUserSimpleInfo
         };
 
         return service;

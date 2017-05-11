@@ -22,7 +22,6 @@ namespace Mutual.Portal.Service.BusinessLogic.UserManagement
 
         public ResponseObject CheckUseravailability(UserSocialAccountProviderType userAuthenticationType, string socialId, string name, string email)
         {
-            
             try
             {
                 var userObj =  _operationContext.Set<User>().FirstOrDefault(u => u.SocialId == socialId && u.SocialAccountProvider == (int)userAuthenticationType);
@@ -119,7 +118,34 @@ namespace Mutual.Portal.Service.BusinessLogic.UserManagement
 
                 var userDtoObj = UserDto.GetDto(userObj);
 
-                return ResponseManager.GetSuccessResponse(userDtoObj, SuccessMessages.SUCCESSFULLY_FECHED, ResponseType.Ok);
+                var obj = ResponseManager.GetSuccessResponse(userDtoObj, SuccessMessages.SUCCESSFULLY_FECHED, ResponseType.Ok);
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                var expObj = ResponseManager.GetExceptionResponse(ExceptionMessages.OPERATION_FAILED, ex, "EXP-0004", ResponseType.InternalServerError);
+                return expObj;
+            }
+        }
+
+        public ResponseObject GetUserSimpleInfo(string userGuid)
+        {
+            try
+            {
+                var userObj = _operationContext.Set<User>().FirstOrDefault(u => u.Guid.ToString() == userGuid);
+                if (userObj == null)
+                { 
+                    var errObj = ResponseManager.GetLogicalErrorResponse(ErrorMessages.USER_NOT_FOUND, "ERR-8897", ResponseType.InternalServerError);
+                    return errObj;
+                }
+
+                var simpleInfo = new UserSimpleInfo()
+                {
+                    MyRemainingViewCount = userObj.MyRemainingViewCount
+                };
+
+                var obj = ResponseManager.GetSuccessResponse(simpleInfo, SuccessMessages.SUCCESSFULLY_FECHED, ResponseType.Ok);
+                return obj;
             }
             catch (Exception ex)
             {
