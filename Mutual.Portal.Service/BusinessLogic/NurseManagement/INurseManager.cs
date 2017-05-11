@@ -12,5 +12,7 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement
         ResponseObject GetIndividualNurse(string requesteeGuid, string requesterGuid);
         ResponseObject GetNurseListByCurrentHospital(int hospitalId, string requesterGuid);
         ResponseObject GetNurseListByDreamHospital(int hospitalId, string requesterGuid);
+        ResponseObject GetIndividualProfileDetails(string requesteeGuid, string requesterGuid);
+        ResponseObject GetContactDetails(string requesteeGuid, string requesterGuid);
     }
 }

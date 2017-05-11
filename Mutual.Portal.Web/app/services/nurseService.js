@@ -28,11 +28,27 @@
             });
         };
 
+        function getIndividualProfileDetails(requesteeGuid) {
+            var url = '/api/nurse/get-individual-profile-details?requesteeGuid=' + requesteeGuid;
+            return httpService.get(url).then(function (response) {
+                return response;
+            });
+        };
+
+        function getContactDetails(requesteeGuid) {
+            var url = '/api/nurse/get-contact-details?requesteeGuid=' + requesteeGuid;
+            return httpService.get(url).then(function (response) {
+                return response;
+            });
+        }
+
         var service = {
             getIndividualUserDetails: getIndividualUserDetails,
             getHospitalList: getHospitalList,
             saveNurse: saveNurse,
-            searchNurses: searchNurses
+            searchNurses: searchNurses,
+            getIndividualProfileDetails: getIndividualProfileDetails,
+            getContactDetails: getContactDetails
         };
 
         return service;

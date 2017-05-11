@@ -12,9 +12,9 @@ namespace Mutual.Portal.Service.BusinessLogic.UserManagement.Dto
         public string SocialId { get; set; }
         public int SocialAccountProvider { get; set; }
         public DateTime RegisteredOn { get; set; }
-        public string RegisteredOnString => RegisteredOn.ToString("d");
+        public string RegisteredOnString => RegisteredOn.ToString("f");
         public DateTime LastLoginOn { get; set; }
-        public string LastLoginOnString => LastLoginOn.ToString("d");
+        public string LastLoginOnString => LastLoginOn.ToString("f");
         public string ContactNumber1 { get; set; }
         public string ContactNumber2 { get; set; }
         public string Email { get; set; }
@@ -30,6 +30,8 @@ namespace Mutual.Portal.Service.BusinessLogic.UserManagement.Dto
         public string GuidString => Guid.ToString();
         public int MyCurrentViewCount { get; set; }
         public int MyTotalViewCount { get; set; }
+        public int CountViwedByMe { get; set; }
+        public int MyRemainingViewCount { get; set; }
 
         #endregion
 
@@ -56,7 +58,9 @@ namespace Mutual.Portal.Service.BusinessLogic.UserManagement.Dto
                 State = user.State,
                 Guid = user.Guid,
                 MyCurrentViewCount = user.MyCurrentViewCount,
-                MyTotalViewCount = user.MyTotalViewCount
+                MyTotalViewCount = user.MyTotalViewCount,
+                CountViwedByMe = user.CountViwedByMe,
+                MyRemainingViewCount = user.MyRemainingViewCount
             };
 
             return obj;
@@ -67,13 +71,13 @@ namespace Mutual.Portal.Service.BusinessLogic.UserManagement.Dto
             var obj = new User()
             {
                 Id = userDto.Id,
-                Guid=userDto.Guid,
+                Guid = userDto.Guid,
                 ContactNumber1 = userDto.ContactNumber1,
                 ContactNumber2 = userDto.ContactNumber2,
                 Email = userDto.Email,
                 Code = userDto.Code,
-                SocialAccountProvider=userDto.SocialAccountProvider,
-                SocialId=userDto.SocialId,
+                SocialAccountProvider = userDto.SocialAccountProvider,
+                SocialId = userDto.SocialId,
                 EmploymentType = userDto.EmploymentType,
                 IsActive = userDto.IsActive,
                 IsDeleted = userDto.IsDeleted,
@@ -85,7 +89,9 @@ namespace Mutual.Portal.Service.BusinessLogic.UserManagement.Dto
                 RegisteredOn = userDto.RegisteredOn,
                 State = userDto.State,
                 MyCurrentViewCount = userDto.MyCurrentViewCount,
-                MyTotalViewCount = userDto.MyTotalViewCount
+                MyTotalViewCount = userDto.MyTotalViewCount,
+                CountViwedByMe = userDto.CountViwedByMe,
+                MyRemainingViewCount = userDto.MyRemainingViewCount
             };
 
             return obj;

@@ -28,7 +28,6 @@ namespace Mutual.Portal.Web.Controllers.BusinessApi
             return _getHttpClientResponse(obj);
         }
 
-
         [HttpGet]
         [Authorize]
         [Route("search-nurses")]
@@ -67,13 +66,32 @@ namespace Mutual.Portal.Web.Controllers.BusinessApi
             return Ok(obj);
         }
 
-
         [HttpGet]
         [Authorize]
         [Route("get-nurse-list-by-dream-hospital")]
         public IHttpActionResult GetNurseListByDreamHospital(int hospitalId)
         {
             var obj = _nurseManager.GetNurseListByDreamHospital(hospitalId, "");
+            return Ok(obj);
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("get-individual-profile-details")]
+        public IHttpActionResult GetIndividualProfileDetails(string requesteeGuid)
+        {
+            var requesterGuid = _getUserGuid();
+            var obj = _nurseManager.GetIndividualProfileDetails(requesteeGuid, requesterGuid);
+            return Ok(obj);
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("get-contact-details")]
+        public IHttpActionResult GetContactDetails(string requesteeGuid)
+        {
+            var requesterGuid = _getUserGuid();
+            var obj = _nurseManager.GetContactDetails(requesteeGuid, requesterGuid);
             return Ok(obj);
         }
 

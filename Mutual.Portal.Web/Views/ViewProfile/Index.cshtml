@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div ng-controller="viewProfileCtrl as vm">
+    <h2>Index</h2>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Profile | Code:{{vm.theRequestee.code}}</h3>
+        </div>
+        <div class="panel-body">
+            <h3>Name: {{vm.theRequestee.name}}</h3>
+            <hr/>
+            <h4>{{vm.theRequestee.description}}</h4>
+            <hr/>
+
+            <h4><span><i class="fa fa-lock fa-lg"></i>  </span> Last Login: <b>{{vm.theRequestee.lastLogin}}</b></h4>
+            <h4><span><i class="fa fa-eye fa-lg"></i></span> Views: <b>{{vm.theRequestee.viewCount}}</b></h4>
+            <h4><span><i class="fa fa-mobile-phone fa-lg"></i></span> Contact: <b>{{vm.theRequestee.contact1}} / {{vm.theRequestee.contact2}}</b></h4>
+            <h4><span><i class="fa fa-mail-forward fa-lg"></i></span> Email: <b>{{vm.theRequestee.email}}</b></h4>
+            <hr/>
+            <a class="btn btn-primary" href="" ng-click="vm.getContactDetails()">View Contact Details &raquo;</a>
+        </div>
+    </div>
+    </div>

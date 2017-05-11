@@ -54,6 +54,7 @@
     <Compile Include="BusinessLogic\NotificationManagement\NotificationManager.cs" />
     <Compile Include="BusinessLogic\NurseManagement\Dto\DreamHospitalDto.cs" />
     <Compile Include="BusinessLogic\NurseManagement\Dto\HospitalDto.cs" />
+    <Compile Include="BusinessLogic\NurseManagement\Dto\NurseContactDetails.cs" />
     <Compile Include="BusinessLogic\NurseManagement\Dto\NurseDto.cs" />
     <Compile Include="BusinessLogic\NurseManagement\INurseManager.cs" />
     <Compile Include="BusinessLogic\NurseManagement\NurseManager.cs" />

@@ -180,12 +180,14 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement
                     tempNurseDto.DreamHospitalList = dreamHospitalDtoList;
 
                     // Removing contact and sensitive data
-                    string tempContact1FirstThreeCharacteres = tempNurseDto.User.ContactNumber1.Substring(0, 3);
-                    string tempContact2FirstThreeCharacteres = tempNurseDto.User.ContactNumber2.Substring(0, 3);
+                    const string tempContact1FirstThreeCharacteres = "071";
+                    tempNurseDto.User.ContactNumber1?.Substring(0, 3);
                     tempNurseDto.User.ContactNumber1 = tempContact1FirstThreeCharacteres + "-XXXXXXX";
-                    tempNurseDto.User.ContactNumber2 = tempContact2FirstThreeCharacteres + "-XXXXXXX";
 
-                    tempNurseDto.User.Guid = new Guid();
+                    const string tempContact2FirstThreeCharacteres = "077";
+                    tempNurseDto.User.ContactNumber2?.Substring(0, 3);
+                    tempNurseDto.User.ContactNumber2 = tempContact2FirstThreeCharacteres + "-XXXXXXX";
+                    
                     tempNurseDto.User.Name = "XXXX XXXXXXXXXX";
                     tempNurseDto.User.Email = "xxxxx@xxxx.com";
                     tempNurseDto.User.SocialAccountProvider = 0;
@@ -196,6 +198,150 @@ namespace Mutual.Portal.Service.BusinessLogic.NurseManagement
 
                 var expObj = ResponseManager.GetSuccessResponse(filteredNurseDtoList, SuccessMessages.SUCCESSFULLY_FECHED, ResponseType.Ok);
                 return expObj;
+            }
+            catch (Exception ex)
+            {
+                var expObj = ResponseManager.GetExceptionResponse(ExceptionMessages.OPERATION_FAILED, ex, "EXP-0004", ResponseType.InternalServerError);
+                return expObj;
+            }
+        }
+
+        public ResponseObject GetIndividualProfileDetails(string requesteeGuid, string requesterGuid)
+        {
+            try
+            {
+                var requestee = _operationContext.Set<Nurse>()
+                    .Include(r => r.DreamHospitalList)
+                    .Include(r => r.DreamHospitalList.Select(h => h.Hospital))
+                    .Include(r => r.Hospital)
+                    .Include(r => r.User)
+                    .FirstOrDefault(r => r.User.Guid.ToString().Equals(requesteeGuid) && r.User.IsActive && !r.User.IsDeleted);
+
+                if (requestee == null)
+                {
+                    var errObj = ResponseManager.GetLogicalErrorResponse(ErrorMessages.REQUESTEE_NOT_FOUND, "ERR-0008", ResponseType.InternalServerError);
+                    return errObj;
+                }
+
+                var requesteeDto = NurseDto.GetDto(requestee);
+
+                if (requesteeGuid != requesterGuid)
+                {
+                    // Removing contact and sensitive data
+                    const string tempContact1FirstThreeCharacteres = "071";
+                    requesteeDto.User.ContactNumber1?.Substring(0, 3);
+                    requesteeDto.User.ContactNumber1 = tempContact1FirstThreeCharacteres + "-XXXXXXX";
+
+                    const string tempContact2FirstThreeCharacteres = "077";
+                    requesteeDto.User.ContactNumber2?.Substring(0, 3);
+                    requesteeDto.User.ContactNumber2 = tempContact2FirstThreeCharacteres + "-XXXXXXX";
+
+
+                    requesteeDto.User.Name = "XXXX XXXXXXXXXX";
+                    requesteeDto.User.Email = "xxxxx@xxxx.com";
+                    requesteeDto.User.SocialAccountProvider = 0;
+                    requesteeDto.User.SocialId = "************";
+
+                    requestee.User.MyCurrentViewCount = requesteeDto.User.MyCurrentViewCount + 1;
+                    _operationContext.Save();
+                }
+                else
+                {
+                    requesteeDto.User.Name = requesteeDto.User.Name + "  (This is you)";
+                }
+
+                var dreamHospitalDtoList = (from dreamHospitalBo in requestee.DreamHospitalList
+                    where dreamHospitalBo.IsActive
+                    select DreamHospitalDto.GetDto(dreamHospitalBo))
+                    .ToList();
+
+                requesteeDto.DreamHospitalList = dreamHospitalDtoList;
+
+                var obj = ResponseManager.GetSuccessResponse(requesteeDto, SuccessMessages.SUCCESSFULLY_FECHED, ResponseType.Ok);
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                var expObj = ResponseManager.GetExceptionResponse(ExceptionMessages.OPERATION_FAILED, ex, "EXP-0004", ResponseType.InternalServerError);
+                return expObj;
+            }
+        }
+
+        public ResponseObject GetContactDetails(string requesteeGuid, string requesterGuid)
+        {
+            try
+            {
+                var requester = _operationContext.Set<Nurse>()
+                    .Include(r => r.User)
+                    .FirstOrDefault(r => r.User.Guid.ToString() == requesterGuid && r.User.IsActive && !r.User.IsDeleted);
+
+                if (requester == null)
+                {
+                    var errObj = ResponseManager.GetLogicalErrorResponse(ErrorMessages.USER_NOT_FOUND, "ERR-0008", ResponseType.InternalServerError);
+                    return errObj;
+                }
+
+                var requestee = _operationContext.Set<Nurse>()
+                    .Include(r => r.DreamHospitalList)
+                    .Include(r => r.DreamHospitalList.Select(h => h.Hospital))
+                    .Include(r => r.Hospital)
+                    .Include(r => r.User)
+                    .FirstOrDefault(r => r.User.Guid.ToString().Equals(requesteeGuid) && r.User.IsActive && !r.User.IsDeleted);
+
+                if (requestee == null)
+                {
+                    var errObj = ResponseManager.GetLogicalErrorResponse(ErrorMessages.REQUESTEE_NOT_FOUND, "ERR-0008", ResponseType.InternalServerError);
+                    return errObj;
+                }
+
+                // check the eligibility of both parties
+                // update remaining and view count by me
+                // change register type if remaining view count is over
+                if (requester.User.MyRemainingViewCount > 0 && (requester.User.State ==(int)UserStates.Paid || requester.User.State ==(int)UserStates.Promotion))
+                {
+                    //This one is eligible
+                    if (requestee.User.State == (int)UserStates.Paid || requestee.User.State == (int)UserStates.Promotion)
+                    {
+                        // requestee is also eligible. No problem at all
+                        var requesteeContactDetails = new NurseContactDetails()
+                        {
+                            Name = requestee.User.Name,
+                            Contact1 = requestee.User.ContactNumber1,
+                            Contact2 = requestee.User.ContactNumber2,
+                            Email = requestee.User.Email
+                        };
+
+                        if (requesteeGuid != requesterGuid)
+                        {
+                            int shouldRemain = requestee.User.MyRemainingViewCount - 1;
+                            requestee.User.MyRemainingViewCount = shouldRemain;
+
+                            if (shouldRemain <= 0) requestee.User.State = (int) UserStates.Free;
+                        }
+                        else
+                        {
+                            requesteeContactDetails.Name = requesteeContactDetails.Name + "  (This is you)";
+                        }
+
+                        _operationContext.Save();
+
+                        var obj = ResponseManager.GetSuccessResponse(requesteeContactDetails, SuccessMessages.SUCCESSFULLY_FECHED, ResponseType.Ok);
+                        return obj;
+                    }
+                        // notify to requestee to upgrade the account
+                        var objElse = ResponseManager.GetSuccessResponse(null, SuccessMessages.REQUESTEE_NOT_ELIGIBLE, ResponseType.Ok);
+                        return objElse;
+                }
+                
+                    // This one has no permission to view details
+                if (!(requester.User.State == (int)UserStates.Paid || requester.User.State == (int)UserStates.Promotion))
+                {
+                    var objElse = ResponseManager.GetSuccessResponse(null, SuccessMessages.REQUESTER_NOT_PAID, ResponseType.Ok);
+                    return objElse;
+                }
+
+                var objViewCount = ResponseManager.GetSuccessResponse(null, SuccessMessages.VIEW_COUNT_OVER, ResponseType.Ok);
+                return objViewCount;
             }
             catch (Exception ex)
             {

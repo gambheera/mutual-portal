@@ -37,23 +37,24 @@
                         <div class="ui card">
                             <div class="content">
                                 <span class="right floated star">
-                                        Favorite
+                                        <i class="fa fa-eye"> {{nurse.viewCount}}</i>
                                     </span>
                                 <i class="right"></i>
                                 <div class="header">Code: {{nurse.code}}</div>
                                 <hr/>
                                 <div class="description">
-                                    <p>{{nurse.description | cut: true: 40: ' ...'}}</p>
+                                    <p>{{nurse.description | cut: true: 100: ' ...'}}</p>
                                 </div>
+                                <a href="">Active: {{nurse.lastLogin}}</a>
                             </div>
                             <div class="extra content" style="background-color: ghostwhite">
                                 <span class="left">
                                         <i class=""></i>
-                                    <a href="">Last Login: {{nurse.lastLogin}}</a>
+                                    @*<a href="">Active: {{nurse.lastLogin}}</a>*@
                                     </span>
                                 <span class="right floated star">
-                                        <i class=""></i>
-                                        <a href="">View Profile</a>
+                                        <a href="" ng-click="vm.gotoIndividualProfilePage(nurse.guid)">View Profile</a>
+                                    <i class="fa fa-arrow-right"></i>
                                     </span>
                             </div>
                         </div>

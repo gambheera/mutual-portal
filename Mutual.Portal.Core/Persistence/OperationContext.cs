@@ -60,6 +60,8 @@ namespace Mutual.Portal.Core.Persistence
             modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
             modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
 
+            modelBuilder.Entity<MyConfiguration>().HasKey(r => r.Id);
+
             modelBuilder.Entity<TestEntity>().HasKey(r => r.Id);
             modelBuilder.Entity<User>().HasKey(r => r.Id);
             modelBuilder.Entity<Hospital>().HasKey(r => r.Id);

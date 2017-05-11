@@ -56,6 +56,8 @@ namespace Mutual.Portal.Core.Entities.Common
 
         public int MyTotalViewCount { get; set; }
 
+        public int CountViwedByMe { get; set; }
 
+        public int MyRemainingViewCount { get; set; }
     }
 }

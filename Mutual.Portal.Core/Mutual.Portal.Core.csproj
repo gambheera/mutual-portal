@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Common\MyConfiguration.cs" />
     <Compile Include="Entities\Common\Notification.cs" />
     <Compile Include="Entities\Common\User.cs" />
     <Compile Include="Entities\Nursing\DreamHospital.cs" />
@@ -115,6 +116,22 @@
     <Compile Include="Migrations\201704140234385_4-14-8-00-a.Designer.cs">
       <DependentUpon>201704140234385_4-14-8-00-a.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705100437245_5-10-10-6-p.cs" />
+    <Compile Include="Migrations\201705100437245_5-10-10-6-p.Designer.cs">
+      <DependentUpon>201705100437245_5-10-10-6-p.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705100447591_5-10-10-17-a.cs" />
+    <Compile Include="Migrations\201705100447591_5-10-10-17-a.Designer.cs">
+      <DependentUpon>201705100447591_5-10-10-17-a.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705101631364_5-10-10-1-p.cs" />
+    <Compile Include="Migrations\201705101631364_5-10-10-1-p.Designer.cs">
+      <DependentUpon>201705101631364_5-10-10-1-p.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705101640183_5-10-10-9-p.cs" />
+    <Compile Include="Migrations\201705101640183_5-10-10-9-p.Designer.cs">
+      <DependentUpon>201705101640183_5-10-10-9-p.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Persistence\IDbContext.cs" />
     <Compile Include="Persistence\IOperationDbContext.cs" />
@@ -160,6 +177,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704140234385_4-14-8-00-a.resx">
       <DependentUpon>201704140234385_4-14-8-00-a.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705100437245_5-10-10-6-p.resx">
+      <DependentUpon>201705100437245_5-10-10-6-p.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705100447591_5-10-10-17-a.resx">
+      <DependentUpon>201705100447591_5-10-10-17-a.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705101631364_5-10-10-1-p.resx">
+      <DependentUpon>201705101631364_5-10-10-1-p.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705101640183_5-10-10-9-p.resx">
+      <DependentUpon>201705101640183_5-10-10-9-p.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

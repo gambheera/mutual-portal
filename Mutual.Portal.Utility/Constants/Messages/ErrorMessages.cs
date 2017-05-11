@@ -17,5 +17,7 @@ namespace Mutual.Portal.Utility.Constants.Messages
 
         public const string INVALID__PAGE_NUMBER = "Requested page is not valid";
 
+        public const string REQUESTEE_NOT_FOUND = "Requested user details are not available";
+
     }
 }

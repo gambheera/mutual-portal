@@ -9,10 +9,11 @@ namespace Mutual.Portal.Utility.Enums
     public enum UserStates
     {
         Free = 1,
-        Registered = 2,
+        Paid = 2,
         BlackListed = 3, // This is happening because of unethical behaviour
         Disconnected = 4, // This is done by the user
         Suspended = 5, // This is for long term unused accounts
+        Promotion = 6 // Free access in promotions
     }
 
     public enum EmploymentTypes

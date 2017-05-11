@@ -15,5 +15,11 @@ namespace Mutual.Portal.Utility.Constants.Messages
         public const string NURSE_CREATED_SUCCESSFULLY = "Nurse created successfully";
 
         public const string NURSE_UPDATED_SUCCESSFULLY = "Nurse updated successfully";
+
+        public const string REQUESTEE_NOT_ELIGIBLE = "Requesting user data cannot be viewd. The person you requesting is not registered yet. We will inform him/her about your request";
+
+        public const string REQUESTER_NOT_PAID = "Please upgrade your account to view details";
+
+        public const string VIEW_COUNT_OVER = "Please renew your account. Your remaining view count is over";
     }
 }
